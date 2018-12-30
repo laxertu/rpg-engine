@@ -1,12 +1,12 @@
 from easyAI.TwoTeamsGame import TwoTeamsGame
-from easyAI.TwoTeamsGame import OrderedStrategy
+from easyAI.TwoTeamsGame import OrderedPlayerSelector
 from entities.actions import SwordAttack
 from random import randint
 
 class Game(TwoTeamsGame):
 
     def __init__(self, team1, team2):
-        self.strategy = OrderedStrategy(team1, team2)
+        self.player_selector = OrderedPlayerSelector(team1, team2)
         self.nplayer = 1
 
     def scoring(self):
@@ -29,15 +29,20 @@ class Game(TwoTeamsGame):
 
     def is_over(self):
         pfs = 0
-        for enemy in self.current_opponent():
+        for enemy in self.current_opponent_team():
             pfs += enemy.pf
 
         return pfs <= 0
 
     def show(self):
         print('*****************')
-        #print(self.player.name + ' ' + str(self.player.pf))
-        #print(self.opponent.name + ' ' + str(self.opponent.pf))
+        for hero in self.player_selector.current_team():
+            print(hero.name + ' ' + str(hero.pf))
+        print('*****************')
+
+        for enemy in self.player_selector.opponent_team():
+            print(enemy.name + ' ' + str(enemy.pf))
+
         print('*****************')
 
 
