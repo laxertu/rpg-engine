@@ -1,8 +1,9 @@
-import pygame, sys
+from easyAI.TwoTeamsGame import *
+from core.Game import Game
+from entities.characters import Hero
 
-import game as g
-import hero as h
-import enemy as e
+t1 = [Hero('1'), Hero('2')]
+t2 = [Hero('3'), Hero('4')]
 
-x = g.game([h.Hero('Percibel'), e.Enemy('Langostin')])
-x.run()
+g = Game(t1, t2)
+g.run()
