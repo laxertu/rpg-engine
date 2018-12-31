@@ -47,15 +47,17 @@ class Hero(Character):
             print('Target: ', end = '')
 
             inputz = input()
+            print('')
             if inputz:
                 target_id = int(inputz)
 
         move = None
         while str(move) not in actions_available:
 
-            for ak in self.actions.keys():
+            for ak in sorted(self.actions.keys()):
                 print(' ' + ak + ': ' + self.actions[ak].name)
 
+            print('')
             print('Action: ', end='')
             move = input()
 

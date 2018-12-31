@@ -54,11 +54,14 @@ class Game(TwoTeamsGame):
     def show(self):
         print('*****************')
         for hero in self.player_selector.teams[0]:
-
+            if hero.pf <= 0:
+                print('[DEAD]', end='')
             print(hero.name + ' ' + str(hero.pf))
 
         print('')
         for enemy in self.player_selector.teams[1]:
+            if enemy.pf <= 0:
+                print('[DEAD]', end='')
             print(enemy.name + ' ' + str(enemy.pf))
 
         print('*****************')
