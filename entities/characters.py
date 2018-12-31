@@ -16,27 +16,49 @@ class Character:
     def setActions(self, actions):
         self.actions = actions
 
+    def doAction(self, action):
+        self.actions[action].do()
+
+    def possibleMoves(self, game: Game):
+        return self.actions.keys()
+
 class Hero(Character):
 
     def __init__(self, name: str):
         super().__init__()
         self.name = name
+        self.actions = {'1': SwordAttack(), '2': Destruction()}
 
     def ask_move(self, game: Game):
-        possible_moves_str = list(map(str, game.possible_moves()))
+
+        actions_available = self.actions.keys()
+        enemies_available = game.alive_enemies()
+
+        target_ids = [x for x in range(1, len(enemies_available) + 1)]
+
+        target_id = None
+        while target_id not in target_ids:
+            print('')
+            enemy_id = 1
+            for enemy in enemies_available:
+                print(' ' + str(enemy_id) + ': ' + enemy.name)
+                enemy_id += 1
+            print('')
+            print('Target: ', end = '')
+
+            inputz = input()
+            if inputz:
+                target_id = int(inputz)
+
         move = None
-        while str(self.mapkey(move)) not in possible_moves_str:
-            print(self.name + ' says: ', end='')
+        while str(move) not in actions_available:
+
+            for ak in self.actions.keys():
+                print(' ' + ak + ': ' + self.actions[ak].name)
+
+            print('Action: ', end='')
             move = input()
-            print(self.mapkey(move))
-        return self.mapkey(move)
 
-    def mapkey(self, key):
-        if key == '1':
-            return 'sword'
+        return str(target_id - 1) + '_' + move
 
-        if key == '2':
-            return 'destruction'
-
-        return ''
 
