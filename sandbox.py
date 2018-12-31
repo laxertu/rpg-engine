@@ -1,4 +1,3 @@
-from easyAI.TwoTeamsGame import *
 from core.Game import Game
 from entities.characters import Hero, AdvAI
 from easyAI import Negamax

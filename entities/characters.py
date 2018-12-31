@@ -76,10 +76,8 @@ class AdvAI(AI_Player):
     def possibleMoves(self, game: Game):
         return self.actions.keys()
 
-    '''
-    TODO: parent call!
-    '''
     def ask_move(self, game):
+        import time
         result = self.AI_algo(game)
         parsed_result = result.split('_')
 
@@ -87,4 +85,6 @@ class AdvAI(AI_Player):
         attack = self.actions[parsed_result[1]].name
 
         game.move_output = self.name + ' makes a ' + attack + ' to ' + target.name
+        time.sleep(2)
+
         return result
