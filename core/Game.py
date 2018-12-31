@@ -19,10 +19,10 @@ class Game(TwoTeamsGame):
         return len(self.current_team()) == 0 or len(self.current_opponent_team()) == 0
 
 
-    def possible_moves(self, actor):
-
+    def possible_moves(self):
+        actor = self.current_player()
         result = []
-        for target in self.alive_enemies():
+        for target in [x for x in range(0, len(self.alive_enemies()))]:
             for action in actor.possibleMoves(self):
                 result.append(str(target) + '_' + action)
         return result
@@ -41,10 +41,10 @@ class Game(TwoTeamsGame):
 
         action = source.actions[parsed_move[1]]
 
-        print(source.name + ' makes an ' + action.name +' to ' + dest.name)
+        #print(source.name + ' makes an ' + action.name +' to ' + dest.name)
         action.do(self, source, dest)
 
-        os.system('clear')
+        #os.system('clear')
 
 
     def _do_action(self, action):
@@ -69,7 +69,7 @@ class Game(TwoTeamsGame):
 
 
     def run(self):
-        os.system('clear')
+        #os.system('clear')
 
         self.show()
         for self.nmove in range(5000):

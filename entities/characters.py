@@ -1,5 +1,6 @@
 from core.Game import Game
 from entities.actions import *
+from easyAI import AI_Player, Negamax
 
 class Character:
 
@@ -64,3 +65,26 @@ class Hero(Character):
         return str(target_id - 1) + '_' + move
 
 
+class AdvAI(AI_Player):
+
+    pf = 10
+
+    @property
+    def actions(self):
+        return {'1': SwordAttack(), '2': Destruction()}
+
+    def possibleMoves(self, game: Game):
+        return self.actions.keys()
+
+    '''
+    TODO: parent call!
+    '''
+    def ask_move(self, game):
+        result = self.AI_algo(game)
+        parsed_result = result.split('_')
+
+        target = game.current_opponent_team()[int(parsed_result[0])]
+        attack = self.actions[parsed_result[1]].name
+
+        print(self.name + ' makes a ' + attack + ' to ' + target.name)
+        return result

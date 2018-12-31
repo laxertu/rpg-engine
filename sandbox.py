@@ -1,10 +1,11 @@
 from easyAI.TwoTeamsGame import *
 from core.Game import Game
-from entities.characters import Hero
+from entities.characters import Hero, AdvAI
+from easyAI import Negamax
 
 
 t1 = [Hero('Percebal'), Hero('Langostin')]
-t2 = [Hero('Sauron'), Hero('Madre Teresa de Calcuta')]
+t2 = [AdvAI(Negamax(4), name='Sauron'), AdvAI(Negamax(4), name='Madre Teresa de Calcuta')]
 
 try:
     g = Game(t1, t2)
