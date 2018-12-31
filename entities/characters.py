@@ -16,6 +16,17 @@ class Character:
 
         self.abilities = {}
 
+    def __str__(self):
+        result = ''
+        result += self.name
+        result += ' Pf: ' + str(self.pf())
+        #result += "\n"
+        #result += ' level ' + str(self._level) + ' Arm: ' + str(self.armour()) + ' Res: ' + str(self.magic_resistance())
+        if self._armour_penalty:
+            result += ' ARMOUR PENALTY'
+
+        return result
+
     def pf(self):
         return self._pf
 
