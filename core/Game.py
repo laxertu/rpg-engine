@@ -10,6 +10,7 @@ class Game(TwoTeamsGame):
     def __init__(self, team1, team2):
         self.player_selector = AdvPlayerSelector(team1, team2)
         self.nplayer = 1
+        self.move_output = ''
 
     def scoring(self):
         result = 1000
@@ -52,6 +53,10 @@ class Game(TwoTeamsGame):
             action.do(self)
 
     def show(self):
+        os.system('clear')
+        print('')
+        print(self.move_output)
+        self.move_output = ''
         print('*****************')
         for hero in self.player_selector.teams[0]:
             if hero.pf <= 0:

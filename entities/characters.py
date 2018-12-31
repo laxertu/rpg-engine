@@ -86,5 +86,5 @@ class AdvAI(AI_Player):
         target = game.current_opponent_team()[int(parsed_result[0])]
         attack = self.actions[parsed_result[1]].name
 
-        print(self.name + ' makes a ' + attack + ' to ' + target.name)
+        game.move_output = self.name + ' makes a ' + attack + ' to ' + target.name
         return result
