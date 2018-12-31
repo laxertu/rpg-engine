@@ -30,3 +30,13 @@ class Destruction(BaseAction):
     def do(self, game, source, dest):
         dest.receivePhisicalDamage(12)
         pass
+
+class ArmourPenalty:
+    name = 'Armour penalty'
+
+    def probability(self):
+        return 20
+
+    def do(self, game, source, dest):
+        dest.receiveArmourPenalty(3)
+        pass

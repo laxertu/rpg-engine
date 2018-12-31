@@ -12,13 +12,15 @@ class Character:
         self._attack = 3
         self._magic = 0
 
+        self._armour_penalty = 0
+
         self.abilities = {}
 
     def pf(self):
         return self._pf
 
     def armour(self):
-        return self._armour
+        return self._armour - self._armour_penalty
 
     def magic_resistance(self):
         return self._magic_resistance
@@ -42,15 +44,16 @@ class Character:
     def receiveMagicDamage(self, amount: int):
         self._pf -= max(0, self.magic_resistance() - amount)
 
+    def receiveArmourPenalty(self, amount: int):
+        self._armour_penalty += amount
+
     def possibleMoves(self, game: Game):
         return self.abilities.keys()
 
-class Knight(Character):
-
+class HumanPlayer(Character):
     def __init__(self, name: str):
         super().__init__()
         self.name = name
-        self.abilities = {'1': SwordAttack(), '2': Destruction()}
 
     def ask_move(self, game: Game):
 
@@ -86,6 +89,15 @@ class Knight(Character):
 
         return str(target_id - 1) + '_' + move
 
+class Knight(HumanPlayer):
+
+    def __init__(self, name: str):
+        super().__init__(name)
+        self.abilities = {'1': SwordAttack(), '2': Destruction()}
+
+
+#ArmourPenalty
+
 class AdvAI(AI_Player, Character):
 
     def __init__(self, AI_algo, name = 'AI'):
@@ -112,3 +124,9 @@ class AdvAI(AI_Player, Character):
         time.sleep(2)
 
         return result
+
+
+class Demon(AdvAI):
+    def __init__(self, AI_algo, name = 'AI'):
+        AdvAI.__init__(self,AI_algo, name)
+        self.abilities = {'1': ArmourPenalty(), '2': Destruction()}

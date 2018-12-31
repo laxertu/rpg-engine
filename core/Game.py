@@ -181,7 +181,7 @@ class Game(TwoTeamsGame):
         for enemy in self.player_selector.teams[1]:
             if enemy.pf() <= 0:
                 print('[DEAD]', end='')
-            print(enemy.name + ' ' + str(enemy.pf()))
+            print(enemy.name + ' [AI] ' + str(enemy.pf()))
 
         print('*****************')
         print('')
@@ -192,7 +192,7 @@ class Game(TwoTeamsGame):
 
         self.show()
         for self.nmove in range(5000):
-            print(self.player.name + '\'s Turn')
+            print(self.player.name + '\'s Turn', end='')
             move = self.player.ask_move(self)
             self.make_move(move)
 

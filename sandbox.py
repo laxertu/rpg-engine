@@ -6,11 +6,11 @@ sys.path.append(basedir + '/core')
 sys.path.append(basedir + '/entities')
 
 from core.Game import Game
-from entities.characters import Knight, AdvAI
+from entities.characters import *
 from easyAI import Negamax
 
 t1 = [Knight('Percebal'), Knight('Langostin')]
-t2 = [AdvAI(Negamax(4), name='Sauron'), AdvAI(Negamax(4), name='Madre Teresa de Calcuta')]
+t2 = [Demon(Negamax(4), name='Sauron'), AdvAI(Negamax(4), name='Madre Teresa de Calcuta')]
 
 try:
     g = Game(t1, t2)
