@@ -124,16 +124,7 @@ class AdvAI(AI_Player, Character):
         return self.abilities.keys()
 
     def ask_move(self, game):
-        import time
         result = self.AI_algo(game)
-        parsed_result = result.split('_')
-
-        target = game.current_opponent_team()[int(parsed_result[0])]
-        attack = self.abilities[parsed_result[1]].name
-
-        game.move_output = self.name + ' makes a ' + attack + ' to ' + target.name
-        time.sleep(2)
-
         return result
 
 

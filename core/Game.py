@@ -168,9 +168,6 @@ class Game(TwoTeamsGame):
 
     def show(self):
         os.system('clear')
-        print('')
-        print(self.move_output)
-        self.move_output = ''
         print('*****************')
         for hero in self.player_selector.teams[0]:
             if hero.pf() <= 0:
@@ -190,14 +187,23 @@ class Game(TwoTeamsGame):
     def run(self):
         #os.system('clear')
 
-        self.show()
         for self.nmove in range(5000):
+            self.show()
             print(self.player.name + '\'s Turn', end='')
             move = self.player.ask_move(self)
+            print('')
+            parsed_result = move.split('_')
+
+            target = self.current_opponent_team()[int(parsed_result[0])]
+            attack = self.player.abilities[parsed_result[1]].name
+
+            print(self.player.name + ' makes a ' + attack + ' to ' + target.name+' ', end='')
+            input()
+
             self.make_move(move)
 
             if self.is_over():
-                os.system('clear')
+                #os.system('clear')
                 self.show()
                 print('DESTRUCTION')
                 print('')
@@ -205,7 +211,7 @@ class Game(TwoTeamsGame):
                 break
 
             self.switch_player()
-            self.show()
+            #self.show()
 
 
 class AdvPlayerSelector(OrderedPlayerSelector):
