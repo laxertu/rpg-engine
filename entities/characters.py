@@ -5,34 +5,56 @@ from easyAI import AI_Player, Negamax
 class Character:
 
     def __init__(self):
-        self.level = 0
-        self.pf = 12
-        self.armour = 7
-        self.magic_resistance = 2
-        self.attack = 3
-        self.magic = 0
+        self._level = 0
+        self._pf = 12
+        self._armour = 7
+        self._magic_resistance = 2
+        self._attack = 3
+        self._magic = 0
 
-        self.actions = {}
+        self.abilities = {}
+
+    def pf(self):
+        return self._pf
+
+    def armour(self):
+        return self._armour
+
+    def magic_resistance(self):
+        return self._magic_resistance
+
+    def phisical_attack(self):
+        return self._attack
+
+    def magic_attack(self):
+        return self._magic
 
     def setActions(self, actions):
-        self.actions = actions
+        self.abilities = actions
 
     def doAction(self, action):
-        self.actions[action].do()
+        self.abilities[action].do()
+
+    def receivePhisicalDamage(self, amount: int):
+        #self._pf -= max(0, self.armour() - amount)
+        self._pf -= amount
+
+    def receiveMagicDamage(self, amount: int):
+        self._pf -= max(0, self.magic_resistance() - amount)
 
     def possibleMoves(self, game: Game):
-        return self.actions.keys()
+        return self.abilities.keys()
 
-class Hero(Character):
+class Knight(Character):
 
     def __init__(self, name: str):
         super().__init__()
         self.name = name
-        self.actions = {'1': SwordAttack(), '2': Destruction()}
+        self.abilities = {'1': SwordAttack(), '2': Destruction()}
 
     def ask_move(self, game: Game):
 
-        actions_available = self.actions.keys()
+        actions_available = self.abilities.keys()
         enemies_available = game.alive_enemies()
 
         target_ids = [x for x in range(1, len(enemies_available) + 1)]
@@ -55,8 +77,8 @@ class Hero(Character):
         move = None
         while str(move) not in actions_available:
 
-            for ak in sorted(self.actions.keys()):
-                print(' ' + ak + ': ' + self.actions[ak].name)
+            for ak in sorted(self.abilities.keys()):
+                print(' ' + ak + ': ' + self.abilities[ak].name)
 
             print('')
             print('Action: ', end='')
@@ -64,17 +86,19 @@ class Hero(Character):
 
         return str(target_id - 1) + '_' + move
 
+class AdvAI(AI_Player, Character):
 
-class AdvAI(AI_Player):
-
-    pf = 10
+    def __init__(self, AI_algo, name = 'AI'):
+        AI_Player.__init__(self, AI_algo, name)
+        Character.__init__(self)
+        self.abilities = {'1': SwordAttack(), '2': Destruction()}
 
     @property
     def actions(self):
         return {'1': SwordAttack(), '2': Destruction()}
 
     def possibleMoves(self, game: Game):
-        return self.actions.keys()
+        return self.abilities.keys()
 
     def ask_move(self, game):
         import time
@@ -82,7 +106,7 @@ class AdvAI(AI_Player):
         parsed_result = result.split('_')
 
         target = game.current_opponent_team()[int(parsed_result[0])]
-        attack = self.actions[parsed_result[1]].name
+        attack = self.abilities[parsed_result[1]].name
 
         game.move_output = self.name + ' makes a ' + attack + ' to ' + target.name
         time.sleep(2)

@@ -1,3 +1,5 @@
+#from entities.characters import Character
+
 
 class BaseAction:
     name = ''
@@ -16,7 +18,7 @@ class SwordAttack(BaseAction):
         return 80
 
     def do(self, game, source, dest):
-        dest.pf -= 5
+        dest.receivePhisicalDamage(8)
         pass
 
 class Destruction(BaseAction):
@@ -26,5 +28,5 @@ class Destruction(BaseAction):
         return 20
 
     def do(self, game, source, dest):
-        dest.pf -= 10
+        dest.receivePhisicalDamage(12)
         pass

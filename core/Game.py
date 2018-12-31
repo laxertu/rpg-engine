@@ -154,7 +154,7 @@ class Game(TwoTeamsGame):
         team = self.current_opponent_team()
         dest = team[int(parsed_move[0])]
 
-        action = source.actions[parsed_move[1]]
+        action = source.abilities[parsed_move[1]]
 
         #print(source.name + ' makes an ' + action.name +' to ' + dest.name)
         action.do(self, source, dest)
@@ -173,15 +173,15 @@ class Game(TwoTeamsGame):
         self.move_output = ''
         print('*****************')
         for hero in self.player_selector.teams[0]:
-            if hero.pf <= 0:
+            if hero.pf() <= 0:
                 print('[DEAD]', end='')
-            print(hero.name + ' ' + str(hero.pf))
+            print(hero.name + ' ' + str(hero.pf()))
 
         print('')
         for enemy in self.player_selector.teams[1]:
-            if enemy.pf <= 0:
+            if enemy.pf() <= 0:
                 print('[DEAD]', end='')
-            print(enemy.name + ' ' + str(enemy.pf))
+            print(enemy.name + ' ' + str(enemy.pf()))
 
         print('*****************')
         print('')
@@ -214,7 +214,7 @@ class AdvPlayerSelector(OrderedPlayerSelector):
     def filter_team(self, team):
 
         #print("Before: " + str(team))
-        ret = [e for e in team if e.pf > 0]
+        ret = [e for e in team if e.pf() > 0]
         #print("After: " + str(ret))
 
         return ret
