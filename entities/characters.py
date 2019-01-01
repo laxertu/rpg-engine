@@ -51,12 +51,16 @@ class Character:
     def receivePhisicalDamage(self, amount: int):
         #self._pf -= max(0, self.armour() - amount)
         self._pf -= amount
+        return self.name + ' lost ' + str(amount) + ' pf'
 
     def receiveMagicDamage(self, amount: int):
-        self._pf -= max(0, self.magic_resistance() - amount)
+        damage = max(0, self.magic_resistance() - amount)
+        self._pf -= damage
+        return self.name + ' lost ' + damage + ' pf'
 
     def receiveArmourPenalty(self, amount: int):
         self._armour_penalty += amount
+        return self.name + ' received ' + str(amount) + ' armour penalty'
 
     def possibleMoves(self, game: Game):
         return self.abilities.keys()

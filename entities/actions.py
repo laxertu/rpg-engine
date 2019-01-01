@@ -8,7 +8,7 @@ class BaseAction:
         return 0
 
     def do(self, game, source, dest):
-        pass
+        return ''
 
 class SwordAttack(BaseAction):
 
@@ -18,7 +18,7 @@ class SwordAttack(BaseAction):
         return 80
 
     def do(self, game, source, dest):
-        dest.receivePhisicalDamage(8)
+        return dest.receivePhisicalDamage(8)
         pass
 
 class Destruction(BaseAction):
@@ -28,7 +28,7 @@ class Destruction(BaseAction):
         return 20
 
     def do(self, game, source, dest):
-        dest.receivePhisicalDamage(12)
+        return dest.receivePhisicalDamage(12)
         pass
 
 class ArmourPenalty:
@@ -38,5 +38,5 @@ class ArmourPenalty:
         return 20
 
     def do(self, game, source, dest):
-        dest.receiveArmourPenalty(3)
+        return dest.receiveArmourPenalty(3)
         pass

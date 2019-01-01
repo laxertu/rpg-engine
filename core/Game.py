@@ -157,7 +157,7 @@ class Game(TwoTeamsGame):
         action = source.abilities[parsed_move[1]]
 
         #print(source.name + ' makes an ' + action.name +' to ' + dest.name)
-        action.do(self, source, dest)
+        return action.do(self, source, dest)
 
         #os.system('clear')
 
@@ -197,10 +197,11 @@ class Game(TwoTeamsGame):
             target = self.current_opponent_team()[int(parsed_result[0])]
             attack = self.player.abilities[parsed_result[1]].name
 
-            print(self.player.name + ' makes a ' + attack + ' to ' + target.name+' ', end='')
+            print(self.player.name + ' makes a ' + attack + ' to ' + target.name+' ')
+            action_result = self.make_move(move)
+            print(action_result + ' ', end='')
             input()
 
-            self.make_move(move)
 
             if self.is_over():
                 #os.system('clear')
