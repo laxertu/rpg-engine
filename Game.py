@@ -2,6 +2,7 @@ from random import randint
 import os
 
 from copy import deepcopy
+import render
 
 
 class TwoTeamsGame:
@@ -125,6 +126,7 @@ class Game(TwoTeamsGame):
         self.player_selector = AdvPlayerSelector(team1, team2)
         self.nplayer = 1
         self.move_output = ''
+        self.renderer = render.UnixConsoleRederer()
 
     def scoring(self):
         result = 1000
@@ -166,22 +168,7 @@ class Game(TwoTeamsGame):
             action.do(self)
 
     def show(self):
-        os.system('clear')
-        print('*****************')
-        for hero in self.player_selector.teams[0]:
-            if hero.pf() <= 0:
-                print('[DEAD]', end='')
-            print(hero)
-
-        print('')
-        for enemy in self.player_selector.teams[1]:
-            if enemy.pf() <= 0:
-                print('[DEAD]', end='')
-            print(enemy)
-
-        print('*****************')
-        print('')
-
+        self.renderer.renderAskMove()
 
     def run(self):
         #os.system('clear')
