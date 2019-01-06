@@ -168,7 +168,7 @@ class Game(TwoTeamsGame):
             action.do(self)
 
     def show(self):
-        self.renderer.renderAskMove()
+        self.renderer.renderAskMove(self)
 
     def run(self):
         #os.system('clear')
