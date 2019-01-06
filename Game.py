@@ -1,5 +1,5 @@
 from random import randint
-import os, time
+import os
 
 from copy import deepcopy
 
@@ -158,7 +158,6 @@ class Game(TwoTeamsGame):
 
         #print(source.name + ' makes an ' + action.name +' to ' + dest.name)
         return action.do(self, source, dest)
-
         #os.system('clear')
 
 

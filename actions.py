@@ -1,5 +1,5 @@
-#from entities.characters import Character
-
+import characters as c
+import Game as g
 
 class BaseAction:
     name = ''
@@ -7,7 +7,7 @@ class BaseAction:
     def probability(self):
         return 0
 
-    def do(self, game, source, dest):
+    def do(self, game: g.Game, source, dest):
         return ''
 
 class SwordAttack(BaseAction):
@@ -29,7 +29,6 @@ class Destruction(BaseAction):
 
     def do(self, game, source, dest):
         return dest.receivePhisicalDamage(12)
-        pass
 
 class ArmourPenalty:
     name = 'Armour penalty'

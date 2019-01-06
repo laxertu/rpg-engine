@@ -1,6 +1,5 @@
-from core.Game import Game
-from entities.actions import *
-from easyAI import AI_Player, Negamax
+import actions as a
+from easyAI import AI_Player
 
 class Character:
 
@@ -51,18 +50,18 @@ class Character:
     def receivePhisicalDamage(self, amount: int):
         #self._pf -= max(0, self.armour() - amount)
         self._pf -= amount
-        return self.name + ' lost ' + str(amount) + ' pf'
+        return self.name + ': -' + str(amount) + ' pf'
 
     def receiveMagicDamage(self, amount: int):
         damage = max(0, self.magic_resistance() - amount)
         self._pf -= damage
-        return self.name + ' lost ' + damage + ' pf'
+        return self.name + ': -' + damage + ' pf'
 
     def receiveArmourPenalty(self, amount: int):
         self._armour_penalty += amount
-        return self.name + ' received ' + str(amount) + ' armour penalty'
+        return self.name + ': -' + str(amount) + ' armour'
 
-    def possibleMoves(self, game: Game):
+    def possibleMoves(self, game):
         return self.abilities.keys()
 
 class HumanPlayer(Character):
@@ -70,7 +69,7 @@ class HumanPlayer(Character):
         super().__init__()
         self.name = name
 
-    def ask_move(self, game: Game):
+    def ask_move(self, game):
 
         actions_available = self.abilities.keys()
         enemies_available = game.alive_enemies()
@@ -108,7 +107,7 @@ class Knight(HumanPlayer):
 
     def __init__(self, name: str):
         super().__init__(name)
-        self.abilities = {'1': SwordAttack(), '2': Destruction()}
+        self.abilities = {'1': a.SwordAttack(), '2': a.Destruction()}
 
 
 #ArmourPenalty
@@ -118,13 +117,13 @@ class AdvAI(AI_Player, Character):
     def __init__(self, AI_algo, name = 'AI'):
         AI_Player.__init__(self, AI_algo, name)
         Character.__init__(self)
-        self.abilities = {'1': SwordAttack(), '2': Destruction()}
+        self.abilities = {'1': a.SwordAttack(), '2': a.Destruction()}
 
     @property
     def actions(self):
-        return {'1': SwordAttack(), '2': Destruction()}
+        return {'1': a.SwordAttack(), '2': a.Destruction()}
 
-    def possibleMoves(self, game: Game):
+    def possibleMoves(self, game):
         return self.abilities.keys()
 
     def ask_move(self, game):
@@ -135,4 +134,4 @@ class AdvAI(AI_Player, Character):
 class Demon(AdvAI):
     def __init__(self, AI_algo, name = 'AI'):
         AdvAI.__init__(self,AI_algo, name)
-        self.abilities = {'1': ArmourPenalty(), '2': Destruction()}
+        self.abilities = {'1': a.ArmourPenalty(), '2': a.Destruction()}
