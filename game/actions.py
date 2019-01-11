@@ -1,5 +1,5 @@
-import characters as c
-import Game as g
+from game import characters
+from game import Game
 
 class BaseAction:
     name = ''
@@ -7,7 +7,7 @@ class BaseAction:
     def probability(self):
         return 0
 
-    def do(self, game: g.Game, source, dest):
+    def do(self, game: Game, source: characters, dest: characters):
         return ''
 
 class SwordAttack(BaseAction):
@@ -17,7 +17,7 @@ class SwordAttack(BaseAction):
     def probability(self):
         return 80
 
-    def do(self, game, source, dest):
+    def do(self, game: Game, source: characters, dest: characters):
         return dest.receivePhisicalDamage(8)
         pass
 
@@ -27,7 +27,7 @@ class Destruction(BaseAction):
     def probability(self):
         return 20
 
-    def do(self, game, source, dest):
+    def do(self, game: Game, source: characters, dest: characters):
         return dest.receivePhisicalDamage(12)
 
 class ArmourPenalty:
@@ -36,6 +36,6 @@ class ArmourPenalty:
     def probability(self):
         return 20
 
-    def do(self, game, source, dest):
+    def do(self, game: Game, source: characters, dest: characters):
         return dest.receiveArmourPenalty(3)
         pass

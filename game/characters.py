@@ -1,5 +1,6 @@
-import actions as a
+from game import actions as a
 from easyAI import AI_Player
+from game import Game
 
 class Character:
 
@@ -41,10 +42,10 @@ class Character:
     def magic_attack(self):
         return self._magic
 
-    def setActions(self, actions):
+    def setActions(self, actions: dict):
         self.abilities = actions
 
-    def doAction(self, action):
+    def doAction(self, action: str):
         self.abilities[action].do()
 
     def receivePhisicalDamage(self, amount: int):
@@ -61,7 +62,7 @@ class Character:
         self._armour_penalty += amount
         return self.name + ': -' + str(amount) + ' armour'
 
-    def possibleMoves(self, game):
+    def possibleMoves(self, game: Game):
         return self.abilities.keys()
 
 class HumanPlayer(Character):
@@ -69,7 +70,7 @@ class HumanPlayer(Character):
         super().__init__()
         self.name = name
 
-    def ask_move(self, game):
+    def ask_move(self, game: Game):
 
         actions_available = self.abilities.keys()
         enemies_available = game.alive_enemies()

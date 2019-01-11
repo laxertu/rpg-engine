@@ -1,9 +1,10 @@
 import os
 
+from game import Game
 
 class UnixConsoleRederer:
 
-    def renderAskMove(self, game):
+    def renderAskMove(self, game: Game):
         os.system('clear')
         print('*****************')
         for hero in game.player_selector.teams[0]:

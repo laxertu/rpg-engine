@@ -1,8 +1,7 @@
 from random import randint
-import os
 
 from copy import deepcopy
-import render
+from game import render
 
 
 class TwoTeamsGame:
