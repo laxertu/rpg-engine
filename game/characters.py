@@ -4,7 +4,9 @@ from game import Game
 
 class Character:
 
-    def __init__(self):
+    def __init__(self, name: str):
+        self.name = name
+
         self._level = 0
         self._pf = 12
         self._armour = 7
@@ -56,7 +58,7 @@ class Character:
     def receiveMagicDamage(self, amount: int):
         damage = max(0, self.magic_resistance() - amount)
         self._pf -= damage
-        return self.name + ': -' + damage + ' pf'
+        return self.name + ': -' + str(damage) + ' pf'
 
     def receiveArmourPenalty(self, amount: int):
         self._armour_penalty += amount
@@ -66,9 +68,6 @@ class Character:
         return self.abilities.keys()
 
 class HumanPlayer(Character):
-    def __init__(self, name: str):
-        super().__init__()
-        self.name = name
 
     def ask_move(self, game: Game):
 
@@ -117,7 +116,7 @@ class AdvAI(AI_Player, Character):
 
     def __init__(self, AI_algo, name = 'AI'):
         AI_Player.__init__(self, AI_algo, name)
-        Character.__init__(self)
+        Character.__init__(self, name)
         self.abilities = {'1': a.SwordAttack(), '2': a.Destruction()}
 
     @property
