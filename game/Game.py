@@ -6,6 +6,12 @@ from game import render
 
 class TwoTeamsGame:
 
+    def __init__(self, team1, team2):
+        self.player_selector = AdvPlayerSelector(team1, team2)
+        self.nplayer = 1
+        self.move_output = ''
+        self.renderer = render.UnixConsoleRederer()
+
     def play(self, nmoves=1000, verbose=True):
 
         history = []
@@ -121,14 +127,16 @@ class OrderedPlayerSelector:
 
 class Game(TwoTeamsGame):
 
-    def __init__(self, team1, team2):
-        self.player_selector = AdvPlayerSelector(team1, team2)
-        self.nplayer = 1
-        self.move_output = ''
-        self.renderer = render.UnixConsoleRederer()
 
     def scoring(self):
-        result = 1000
+        result = 0
+
+        for p in self.current_opponent_team():
+            result -= p.pf() - p.pf_max() + p.scoring()
+
+        for p in self.current_team():
+            result -= p.pf() - p.pf_max() + p.scoring()
+
         return result
 
     def is_over(self):
@@ -157,9 +165,12 @@ class Game(TwoTeamsGame):
 
         action = source.abilities[parsed_move[1]]
 
-        #print(source.name + ' makes an ' + action.name +' to ' + dest.name)
-        return action.do(self, source, dest)
-        #os.system('clear')
+
+        #if randint(1, 100) <= action.probability() or self.ai_scoring_game:
+        if randint(1, 100) <= action.probability():
+            return action.do(self, source, dest)
+
+        return ''
 
 
     def _do_action(self, action):
@@ -204,9 +215,6 @@ class AdvPlayerSelector(OrderedPlayerSelector):
 
 
     def filter_team(self, team):
-
-        #print("Before: " + str(team))
         ret = [e for e in team if e.pf() > 0]
-        #print("After: " + str(ret))
 
         return ret

@@ -8,7 +8,8 @@ class Character:
         self.name = name
 
         self._level = 0
-        self._pf = 12
+        self._pf_max = 30
+        self._pf = self._pf_max
         self._armour = 7
         self._magic_resistance = 2
         self._attack = 3
@@ -32,6 +33,9 @@ class Character:
     def pf(self):
         return self._pf
 
+    def pf_max(self):
+        return self._pf_max
+
     def armour(self):
         return self._armour - self._armour_penalty
 
@@ -40,6 +44,13 @@ class Character:
 
     def phisical_attack(self):
         return self._attack
+
+    def phisical_resistence(self):
+        """
+        alias for self.armour
+        :return:
+        """
+        return self.armour()
 
     def magic_attack(self):
         return self._magic
@@ -51,12 +62,11 @@ class Character:
         self.abilities[action].do()
 
     def receivePhisicalDamage(self, amount: int):
-        #self._pf -= max(0, self.armour() - amount)
-        self._pf -= amount
+        self._pf -= max(0, amount - self.phisical_resistence())
         return self.name + ': -' + str(amount) + ' pf'
 
     def receiveMagicDamage(self, amount: int):
-        damage = max(0, self.magic_resistance() - amount)
+        damage = max(0, amount - self.magic_resistance())
         self._pf -= damage
         return self.name + ': -' + str(damage) + ' pf'
 
@@ -66,6 +76,9 @@ class Character:
 
     def possibleMoves(self, game: Game):
         return self.abilities.keys()
+
+    def scoring(self):
+        return self.magic_resistance() + self.magic_attack() + self.phisical_resistence() + self.phisical_attack()
 
 class HumanPlayer(Character):
 
@@ -123,7 +136,7 @@ class AdvAI(AI_Player, Character):
     def actions(self):
         return {'1': a.SwordAttack(), '2': a.Destruction()}
 
-    def possibleMoves(self, game):
+    def possibleMoves(self, game: Game):
         return self.abilities.keys()
 
     def ask_move(self, game):

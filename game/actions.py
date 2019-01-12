@@ -19,7 +19,6 @@ class SwordAttack(BaseAction):
 
     def do(self, game: Game, source: characters, dest: characters):
         return dest.receivePhisicalDamage(8)
-        pass
 
 class Destruction(BaseAction):
     name = 'Destruction'
