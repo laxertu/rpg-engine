@@ -62,8 +62,9 @@ class Character:
         self.abilities[action].do()
 
     def receivePhisicalDamage(self, amount: int):
-        self._pf -= max(0, amount - self.phisical_resistence())
-        return self.name + ': -' + str(amount) + ' pf'
+        damage = max(0, amount - self.phisical_resistence())
+        self._pf -= damage
+        return self.name + ': -' + str(damage) + ' pf'
 
     def receiveMagicDamage(self, amount: int):
         damage = max(0, amount - self.magic_resistance())
