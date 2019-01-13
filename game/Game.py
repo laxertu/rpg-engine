@@ -1,13 +1,13 @@
 from easyAI.TwoTeamsGame import TwoTeamsGame, AbstractOrderedPlayerSelector
 
 from random import randint
-from game import render
+from game import controller
 
 
 class Game(TwoTeamsGame):
 
     def setup_game(self):
-        self.renderer = render.UnixConsoleRederer()
+        self.controller = controller.UnixConsoleController()
 
 
     def scoring(self):
@@ -38,6 +38,11 @@ class Game(TwoTeamsGame):
 
 
     def make_move(self, move):
+        """
+        This method for compatibility with easyAI
+        :param move:
+        :return:
+        """
         parsed_move = move.split('_')
 
         source = self.current_player()
@@ -46,51 +51,21 @@ class Game(TwoTeamsGame):
         dest = team[int(parsed_move[0])]
 
         action = source.abilities[parsed_move[1]]
-
-
-        #if randint(1, 100) <= action.probability() or self.ai_scoring_game:
         if randint(1, 100) <= action.probability():
             return action.do(self, source, dest)
 
         return ''
 
-
-    def _do_action(self, action):
-        if randint(1, 100) <= action.probability():
-            action.do(self)
-
-    def show(self):
-        self.renderer.renderAskMove(self)
-
     def run(self):
-        #os.system('clear')
 
         for self.nmove in range(5000):
-            self.show()
-            print(self.player.name + '\'s Turn', end='')
-            move = self.player.ask_move(self)
-            print('')
-            parsed_result = move.split('_')
-
-            target = self.current_opponent_team()[int(parsed_result[0])]
-            attack = self.player.abilities[parsed_result[1]].name
-
-            print(self.player.name + ' makes a ' + attack + ' to ' + target.name+' ')
-            action_result = self.make_move(move)
-            print(action_result + ' ', end='')
-            input()
-
+            self.controller.next_move(self)
 
             if self.is_over():
-                #os.system('clear')
-                self.show()
-                print('DESTRUCTION')
-                print('')
-                print('')
+                self.controller.game_over()
                 break
 
             self.switch_player()
-            #self.show()
 
 
 class AdvPlayerSelector(AbstractOrderedPlayerSelector):
