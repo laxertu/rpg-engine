@@ -8,12 +8,12 @@ class Character:
         self.name = name
 
         self._level = 0
-        self._pf_max = 30
+        self._pf_max = 20
         self._pf = self._pf_max
-        self._armour = 7
-        self._magic_resistance = 2
+        self._armour = 0
+        self._magic_resistance = 0
         self._attack = 3
-        self._magic = 0
+        self._magic = 3
 
         self._armour_penalty = 0
 
@@ -84,38 +84,8 @@ class Character:
 class HumanPlayer(Character):
 
     def ask_move(self, game: Game):
+        return game.controller().action_selection_modal(game)
 
-        actions_available = self.abilities.keys()
-        enemies_available = game.alive_enemies()
-
-        target_ids = [x for x in range(1, len(enemies_available) + 1)]
-
-        target_id = None
-        while target_id not in target_ids:
-            print('')
-            enemy_id = 1
-            for enemy in enemies_available:
-                print(' ' + str(enemy_id) + ': ' + enemy.name)
-                enemy_id += 1
-            print('')
-            print('Target: ', end = '')
-
-            inputz = input()
-            print('')
-            if inputz:
-                target_id = int(inputz)
-
-        move = None
-        while str(move) not in actions_available:
-
-            for ak in sorted(self.abilities.keys()):
-                print(' ' + ak + ': ' + self.abilities[ak].name)
-
-            print('')
-            print('Action: ', end='')
-            move = input()
-
-        return str(target_id - 1) + '_' + move
 
 class Knight(HumanPlayer):
 

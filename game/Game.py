@@ -7,8 +7,10 @@ from game import controller
 class Game(TwoTeamsGame):
 
     def setup_game(self):
-        self.controller = controller.UnixConsoleController()
+        self._controller = controller.UnixConsoleController()
 
+    def controller(self):
+        return self._controller
 
     def scoring(self):
         result = 0
@@ -59,10 +61,10 @@ class Game(TwoTeamsGame):
     def run(self):
 
         for self.nmove in range(5000):
-            self.controller.next_move(self)
+            self._controller.next_move(self)
 
             if self.is_over():
-                self.controller.game_over()
+                self._controller.game_over(self)
                 break
 
             self.switch_player()
