@@ -4,6 +4,12 @@ from game import Game
 
 class BaseController:
 
+    def next_move(self, game: Game):
+        raise NotImplementedError('Abstract method')
+
+    def game_over(self, game: Game):
+        raise NotImplementedError('Abstract method')
+
     def _parse_raw_selection(self, game, raw_selection):
         parsed_result = raw_selection.split('_')
 
@@ -29,9 +35,15 @@ class UnixConsoleController(BaseController):
         attack, target, action_result = self._do_player_selection(game)
 
         print(game.player.name + ' makes a ' + attack + ' to ' + target.name + ' ')
-        print(action_result + ' ', end='')
+        print(action_result)
+        print('')
         print('[ENTER] to continue')
         input()
+
+    def game_over(self, game: Game):
+        self._print_resume(game)
+        print('**DESTRUCTION**')
+        print('')
 
 
     def _print_resume(self, game: Game):
@@ -49,10 +61,4 @@ class UnixConsoleController(BaseController):
             print(enemy)
 
         print('*****************')
-        print('')
-
-    def game_over(self):
-        self._print_resume()
-        print('DESTRUCTION')
-        print('')
         print('')

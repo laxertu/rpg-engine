@@ -54,7 +54,7 @@ class Game(TwoTeamsGame):
         if randint(1, 100) <= action.probability():
             return action.do(self, source, dest)
 
-        return ''
+        return 'FAILED'
 
     def run(self):
 
