@@ -1,131 +1,13 @@
-from random import randint
+from easyAI.TwoTeamsGame import TwoTeamsGame, AbstractOrderedPlayerSelector
 
-from copy import deepcopy
+from random import randint
 from game import render
 
 
-class TwoTeamsGame:
-
-    def __init__(self, team1, team2):
-        self.player_selector = AdvPlayerSelector(team1, team2)
-        self.nplayer = 1
-        self.move_output = ''
-        self.renderer = render.UnixConsoleRederer()
-
-    def play(self, nmoves=1000, verbose=True):
-
-        history = []
-
-        if verbose:
-            self.show()
-
-        for self.nmove in range(1, nmoves + 1):
-
-            if self.is_over():
-                break
-
-            move = self.player.ask_move(self)
-            history.append((deepcopy(self), move))
-            self.make_move(move)
-
-            if verbose:
-                self.show()
-
-            self.switch_player()
-
-        history.append(deepcopy(self))
-
-        return history
-
-    #@property
-    #def nopponent(self):
-     #   return 2 if (self.nplayer == 1) else 1
-
-
-    @property
-    def opponent_team(self):
-       return self.current_opponent_team()
-
-    @property
-    def player(self):
-        return self.current_player()
-
-    def current_player(self):
-        return self.player_selector.current_player()
-
-    def current_opponent_team(self):
-        return self.player_selector.opponent_team()
-
-    def current_team(self):
-        return self.player_selector.current_team()
-
-    def switch_player(self):
-        self.player_selector.next_player()
-
-    def copy(self):
-        return deepcopy(self)
-
-    def get_move(self):
-        """
-        Method for getting a move from the current player. If the player is an
-        AI_Player, then this method will invoke the AI algorithm to choose the
-        move. If the player is a Human_Player, then the interaction with the
-        human is via the text terminal.
-        """
-        return self.player.ask_move(self)
-
-    def play_move(self, move):
-        """
-        Method for playing one move with the current player. After making the move,
-        the current player will change to the next player.
-
-        Parameters
-        -----------
-
-        move:
-          The move to be played. ``move`` should match an entry in the ``.possibles_moves()`` list.
-        """
-        result = self.make_move(move)
-        self.switch_player()
-        return result
-
-class OrderedPlayerSelector:
-
-    def __init__(self, team1, team2):
-        self.teams = [team1, team2]
-        self.move_no = 0
-        self.counters = [0, 0]
-
-    def filter_team(self, team):
-        return team
-
-    def current_player(self):
-
-        team_id = self._current_team_id()
-        team = self.current_team()
-
-        character_id = self.counters[team_id] % len(team)
-
-        return team[character_id]
-
-    def _current_team_id(self):
-        return self.move_no % 2
-
-    def _next_team_id(self):
-        return (self.move_no + 1) % 2
-
-    def next_player(self):
-        team_id = self._current_team_id()
-        self.counters[team_id] += 1
-        self.move_no += 1
-
-    def current_team(self):
-        return self.filter_team(self.teams[self._current_team_id()])
-
-    def opponent_team(self):
-        return self.filter_team(self.teams[self._next_team_id()])
-
 class Game(TwoTeamsGame):
+
+    def setup_game(self):
+        self.renderer = render.UnixConsoleRederer()
 
 
     def scoring(self):
@@ -211,8 +93,7 @@ class Game(TwoTeamsGame):
             #self.show()
 
 
-class AdvPlayerSelector(OrderedPlayerSelector):
-
+class AdvPlayerSelector(AbstractOrderedPlayerSelector):
 
     def filter_team(self, team):
         ret = [e for e in team if e.pf() > 0]
