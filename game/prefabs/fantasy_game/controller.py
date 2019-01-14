@@ -1,6 +1,7 @@
 import os
 
-from game import Game
+from game.prefabs.fantasy_game import Game
+
 
 class BaseController:
 

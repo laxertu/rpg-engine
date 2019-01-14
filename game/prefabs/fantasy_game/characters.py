@@ -1,6 +1,6 @@
-from game import actions as a
+from game.prefabs.fantasy_game import actions as a, Game
 from easyAI import AI_Player
-from game import Game
+
 
 class Character:
 

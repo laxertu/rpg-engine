@@ -1,7 +1,7 @@
 from easyAI.TwoTeamsGame import TwoTeamsGame, AbstractOrderedPlayerSelector
 
 from random import randint
-from game import controller
+from game.prefabs.fantasy_game import controller
 
 
 class Game(TwoTeamsGame):

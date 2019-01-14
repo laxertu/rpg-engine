@@ -1,5 +1,5 @@
-from game import characters
-from game import Game
+from game.prefabs.fantasy_game import characters
+
 
 class BaseAction:
     name = ''
