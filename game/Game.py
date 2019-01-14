@@ -16,10 +16,10 @@ class Game(TwoTeamsGame):
         result = 0
 
         for p in self.current_opponent_team():
-            result -= p.pf() - p.pf_max() + p.scoring()
+            result -= (p.pf_max() - p.pf()) + p.scoring()
 
         for p in self.current_team():
-            result -= p.pf() - p.pf_max() + p.scoring()
+            result += (p.pf_max() - p.pf()) + p.scoring()
 
         return result
 
