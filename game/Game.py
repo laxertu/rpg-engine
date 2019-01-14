@@ -15,6 +15,9 @@ class Game(TwoTeamsGame):
     def scoring(self):
         result = 0
 
+        if self.is_over():
+            return 1000000
+
         for p in self.current_opponent_team():
             result -= (p.pf_max() - p.pf()) + p.scoring()
 
@@ -54,7 +57,7 @@ class Game(TwoTeamsGame):
 
         action = source.abilities[parsed_move[1]]
         if randint(1, 100) <= action.probability():
-            return action.do(self, source, dest)
+            return action.do(source, dest)
 
         return 'FAILED'
 

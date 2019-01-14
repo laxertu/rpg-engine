@@ -23,9 +23,15 @@ class Character:
     def __str__(self):
         result = ''
         result += self.name
-        result += ' Pf: ' + str(self.pf())
-        #result += "\n"
-        #result += ' level ' + str(self._level) + ' Arm: ' + str(self.armour()) + ' Res: ' + str(self.magic_resistance())
+
+        if self.pf() > 0:
+            result += ' Hp: ' + str(self.pf())
+        else:
+            result += ' [DEAD]'
+
+
+        result += "\n"
+        result += ' Level: ' + str(self._level) + ' Arm: ' + str(self.armour()) + ' Res: ' + str(self.magic_resistance())
         if self._armour_penalty:
             result += ' [ARMOUR PENALTY]'
 
@@ -35,7 +41,7 @@ class Character:
         return result
 
     def pf(self):
-        return self._pf
+        return max(0, self._pf)
 
     def pf_max(self):
         return self._pf_max
@@ -99,6 +105,14 @@ class Knight(HumanPlayer):
 
     def __init__(self, name: str):
         super().__init__(name)
+
+        self._pf_max = 30
+        self._pf = self._pf_max
+        self._armour = 5
+        self._magic_resistance = 0
+        self._attack = 7
+        self._magic = 0
+
         self.abilities = {'1': a.SwordAttack(), '2': a.Destruction()}
 
 
@@ -106,6 +120,14 @@ class Wizard(HumanPlayer):
 
     def __init__(self, name: str):
         super().__init__(name)
+
+        self._pf_max = 15
+        self._pf = self._pf_max
+        self._armour = 0
+        self._magic_resistance = 10
+        self._attack = 0
+        self._magic = 5
+
         self.abilities = {'1': a.MagicPenalty(), '2': a.FireBall()}
 
 class AdvAI(AI_Player, Character):
