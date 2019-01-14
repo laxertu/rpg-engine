@@ -4,7 +4,7 @@ from random import randint
 from game.prefabs.fantasy_game import controller
 
 
-class Game(TwoTeamsGame):
+class Battle(TwoTeamsGame):
 
     def setup_game(self):
         self._controller = controller.UnixConsoleController()

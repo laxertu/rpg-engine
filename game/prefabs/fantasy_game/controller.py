@@ -1,17 +1,17 @@
 import os
 
-from game.prefabs.fantasy_game import Game
+from game.prefabs.fantasy_game import battle
 
 
 class BaseController:
 
-    def next_move(self, game: Game):
+    def next_move(self, game: battle):
         raise NotImplementedError('Abstract method')
 
-    def game_over(self, game: Game):
+    def game_over(self, game: battle):
         raise NotImplementedError('Abstract method')
 
-    def action_selection_modal(self, game: Game):
+    def action_selection_modal(self, game: battle):
         raise NotImplementedError('Abstract method')
 
     def _parse_raw_selection(self, game, raw_selection):
@@ -32,7 +32,7 @@ class BaseController:
 
 class UnixConsoleController(BaseController):
 
-    def next_move(self, game: Game):
+    def next_move(self, game: battle):
         self._print_resume(game)
         print(game.player.name + '\'s Turn')
 
@@ -45,12 +45,12 @@ class UnixConsoleController(BaseController):
         print('Press [ENTER] to continue > ', end='')
         input()
 
-    def game_over(self, game: Game):
+    def game_over(self, game: battle):
         self._print_resume(game)
         print('**DESTRUCTION**')
         print('')
 
-    def action_selection_modal(self, game: Game):
+    def action_selection_modal(self, game: battle):
 
         player_abilities = game.player.abilities
 
@@ -87,7 +87,7 @@ class UnixConsoleController(BaseController):
         return str(target_id - 1) + '_' + move
 
 
-    def _print_resume(self, game: Game):
+    def _print_resume(self, game: battle):
         os.system('clear')
         print('*****************')
         print('* GOOD GUYS *')

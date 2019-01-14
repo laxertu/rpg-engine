@@ -1,4 +1,4 @@
-from game.prefabs.fantasy_game import actions as a, Game
+from game.prefabs.fantasy_game import actions as a, battle
 from easyAI import AI_Player
 
 
@@ -96,7 +96,7 @@ class Character:
         self._magic_penalty += amount
         return self.name + ': -' + str(amount) + ' magic defense'
 
-    def possibleMoves(self, game: Game):
+    def possibleMoves(self, game: battle):
         return self.abilities.keys()
 
     def scoring(self):
@@ -104,7 +104,7 @@ class Character:
 
 class HumanPlayer(Character):
 
-    def ask_move(self, game: Game):
+    def ask_move(self, game: battle):
         return game.controller().action_selection_modal(game)
 
 
@@ -143,7 +143,7 @@ class AdvAI(AI_Player, Character):
         AI_Player.__init__(self, AI_algo, name)
         Character.__init__(self, name)
 
-    def possibleMoves(self, game: Game):
+    def possibleMoves(self, game: battle):
         return self.abilities.keys()
 
     def ask_move(self, game):
