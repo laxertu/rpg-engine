@@ -22,16 +22,23 @@ class Character:
 
     def __str__(self):
         result = ''
-        result += self.name
+        result += self.name + ' [' + type(self).__name__+']'
 
         if self.pf() > 0:
-            result += ' Hp: ' + str(self.pf())
+            pass
         else:
             result += ' [DEAD]'
 
 
+        #result += "\n"
+        #result += ' Level: ' + str(self._level)
+        #result += "\n"
         result += "\n"
-        result += ' Level: ' + str(self._level) + ' Arm: ' + str(self.armour()) + ' Res: ' + str(self.magic_resistance())
+        result += ' Ph att.:  ' + str(self.phisical_attack()) + ' Ph res.: ' + str(self.phisical_resistence())
+        result += "\n"
+        result += ' Mag att.: ' + str(self.magic_attack()) + ' Mag res.: ' + str(self.magic_resistance())
+        result += "\n"
+        result += '[HP]: ' + str(self.pf())
         if self._armour_penalty:
             result += ' [ARMOUR PENALTY]'
 
@@ -148,16 +155,39 @@ class Daemon(AdvAI):
 
     def __init__(self, AI_algo, name = 'Daemon'):
         AdvAI.__init__(self,AI_algo, name)
-        self.abilities = {'1': a.ArmourPenalty(), '2': a.SwordAttack()}
+
+        self._pf_max = 10
+        self._pf = self._pf_max
+        self._armour = 0
+        self._magic_resistance = 12
+        self._attack = 0
+        self._magic = 3
+
+        self.abilities = {'1': a.FireBall(), '2': a.ArmourPenalty()}
 
 class EvilNun(AdvAI):
 
     def __init__(self, AI_algo, name = 'Evil Nun'):
         AdvAI.__init__(self, AI_algo, name)
+        self._pf_max = 15
+        self._pf = self._pf_max
+        self._armour = 0
+        self._magic_resistance = 10
+        self._attack = 0
+        self._magic = 5
+
         self.abilities = {'1': a.MagicPenalty(), '2': a.FireBall()}
 
 class Troll(AdvAI):
 
     def __init__(self, AI_algo, name = 'Troll'):
         AdvAI.__init__(self, AI_algo, name)
+
+        self._pf_max = 20
+        self._pf = self._pf_max
+        self._armour = 2
+        self._magic_resistance = 0
+        self._attack = 7
+        self._magic = 0
+
         self.abilities = {'1': a.ArmourPenalty(), '2': a.Destruction()}

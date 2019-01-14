@@ -77,7 +77,7 @@ class UnixConsoleController(BaseController):
         while str(move) not in actions_available:
 
             for ak in sorted(player_abilities.keys()):
-                print(' ' + ak + ': ' + player_abilities[ak].name)
+                print(' ' + ak + ': ' + player_abilities[ak].name + ' ' +  str(player_abilities[ak].probability()) + '%')
 
             print('')
             print('Action: ', end='')
@@ -89,11 +89,13 @@ class UnixConsoleController(BaseController):
     def _print_resume(self, game: Game):
         os.system('clear')
         print('*****************')
+        print('* GOOD GUYS *')
         for hero in game.player_selector.teams[0]:
             print(hero)
             print('')
 
         print('')
+        print('* BAD GUYS *')
         for enemy in game.player_selector.teams[1]:
             print(enemy)
             print('')
