@@ -29,6 +29,28 @@ class Destruction(BaseAction):
     def do(self, game: Game, source: characters, dest: characters):
         return dest.receivePhisicalDamage(12)
 
+class FireBall(BaseAction):
+
+    name = 'Fire ball'
+
+    def probability(self):
+        return 50
+
+    def do(self, game: Game, source: characters, dest: characters):
+        return dest.receiveMagicDamage(8)
+
+class MagicPenalty(BaseAction):
+
+    name = 'Magic penalty'
+
+    def probability(self):
+        return 50
+
+    def do(self, game: Game, source: characters, dest: characters):
+        return dest.receiveMagicPenalty(8)
+
+
+
 class ArmourPenalty:
     name = 'Armour penalty'
 

@@ -16,6 +16,7 @@ class Character:
         self._magic = 3
 
         self._armour_penalty = 0
+        self._magic_penalty = 0
 
         self.abilities = {}
 
@@ -26,7 +27,10 @@ class Character:
         #result += "\n"
         #result += ' level ' + str(self._level) + ' Arm: ' + str(self.armour()) + ' Res: ' + str(self.magic_resistance())
         if self._armour_penalty:
-            result += ' ARMOUR PENALTY'
+            result += ' [ARMOUR PENALTY]'
+
+        if self._magic_penalty:
+            result += ' [MAGIC PENALTY]'
 
         return result
 
@@ -40,7 +44,7 @@ class Character:
         return self._armour - self._armour_penalty
 
     def magic_resistance(self):
-        return self._magic_resistance
+        return self._magic_resistance - self._magic_penalty
 
     def phisical_attack(self):
         return self._attack
@@ -75,6 +79,10 @@ class Character:
         self._armour_penalty += amount
         return self.name + ': -' + str(amount) + ' armour'
 
+    def receiveMagicPenalty(self, amount: int):
+        self._magic_penalty += amount
+        return self.name + ': -' + str(amount) + ' magic defense'
+
     def possibleMoves(self, game: Game):
         return self.abilities.keys()
 
@@ -94,18 +102,17 @@ class Knight(HumanPlayer):
         self.abilities = {'1': a.SwordAttack(), '2': a.Destruction()}
 
 
-#ArmourPenalty
+class Wizard(HumanPlayer):
+
+    def __init__(self, name: str):
+        super().__init__(name)
+        self.abilities = {'1': a.MagicPenalty(), '2': a.FireBall()}
 
 class AdvAI(AI_Player, Character):
 
     def __init__(self, AI_algo, name = 'AI'):
         AI_Player.__init__(self, AI_algo, name)
         Character.__init__(self, name)
-        self.abilities = {'1': a.SwordAttack(), '2': a.Destruction()}
-
-    @property
-    def actions(self):
-        return {'1': a.SwordAttack(), '2': a.Destruction()}
 
     def possibleMoves(self, game: Game):
         return self.abilities.keys()
@@ -115,7 +122,20 @@ class AdvAI(AI_Player, Character):
         return result
 
 
-class Demon(AdvAI):
-    def __init__(self, AI_algo, name = 'AI'):
+class Daemon(AdvAI):
+
+    def __init__(self, AI_algo, name = 'Daemon'):
         AdvAI.__init__(self,AI_algo, name)
+        self.abilities = {'1': a.ArmourPenalty(), '2': a.SwordAttack()}
+
+class EvilNun(AdvAI):
+
+    def __init__(self, AI_algo, name = 'Evil Nun'):
+        AdvAI.__init__(self, AI_algo, name)
+        self.abilities = {'1': a.MagicPenalty(), '2': a.FireBall()}
+
+class Troll(AdvAI):
+
+    def __init__(self, AI_algo, name = 'Troll'):
+        AdvAI.__init__(self, AI_algo, name)
         self.abilities = {'1': a.ArmourPenalty(), '2': a.Destruction()}
