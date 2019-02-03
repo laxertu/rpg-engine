@@ -1,61 +1,146 @@
-import os
+from game.prefabs.fantasy_game.battle import Battle
+from game.prefabs.fantasy_game.battle import AdvPlayerSelector
 
-from game.prefabs.fantasy_game import battle
 
+class BaseBattleController:
 
-class BaseController:
+    def __init__(self, team1, team2):
+        self._battle = Battle(team1, team2, AdvPlayerSelector)
 
-    def next_move(self, game: battle):
+    def get_battle(self):
+        return self._battle
+
+    def next_move(self):
         raise NotImplementedError('Abstract method')
 
-    def game_over(self, game: battle):
-        raise NotImplementedError('Abstract method')
+    def do_player_move(self, move: str):
 
-    def action_selection_modal(self, game: battle):
-        raise NotImplementedError('Abstract method')
-
-    def _parse_raw_selection(self, game, raw_selection):
-        parsed_result = raw_selection.split('_')
-
-        target = game.current_opponent_team()[int(parsed_result[0])]
-        attack = game.player.abilities[parsed_result[1]].name
-
-        return attack, target
-
-    def _do_player_selection(self, game):
-        raw_selection = game.player.ask_move(game)
-        attack, target = self._parse_raw_selection(game, raw_selection)
-        action_result = game.make_move(raw_selection)
+        attack, target = self._parse_raw_selection(move)
+        action_result = self._battle.make_move(move)
 
         return attack, target, action_result
 
+    def do_enemy_move(self):
+        if not self._battle.is_over():
+            attack, target, action_result = self.next_move()
+            return attack, target, action_result
+        return None
 
-class UnixConsoleController(BaseController):
+    def next_player(self):
 
-    def next_move(self, game: battle):
-        self._print_resume(game)
-        print(game.player.name + '\'s Turn')
+        cp = self._battle.current_player()
+        cp.is_current_player = False
+        self._battle.switch_player()
+        cp = self._battle.current_player()
+        cp.is_current_player = True
 
-        attack, target, action_result = self._do_player_selection(game)
+    def game_over(self):
+        raise NotImplementedError('Abstract method')
 
-        print(game.player.name + ' makes a ' + attack + ' to ' + target.name + ' ')
+    def action_selection_modal(self):
+        raise NotImplementedError('Abstract method')
+
+    def _parse_raw_selection(self, raw_selection: str):
+        parsed_result = raw_selection.split('_')
+        target_id = int(parsed_result[0])
+
+
+        target = self._battle.current_opponent_team()[target_id]
+        attack = self._battle.player.abilities[parsed_result[1]].name
+
+        return attack, target
+
+    def _do_player_selection(self, game: Battle):
+        raw_selection = game.player.ask_move(game)
+
+        if not raw_selection is None:
+            attack, target = self._parse_raw_selection(raw_selection)
+            action_result = game.make_move(raw_selection)
+
+            return attack, target, action_result
+        return None, None, None
+
+    def print_resume(self):
+        import os
+        os.system('clear')
+        print('*****************')
+        print('* GOOD GUYS *')
+        for hero in self._battle.player_selector.teams[0]:
+            print(hero)
+            print('')
+
+        print('')
+        print('* BAD GUYS *')
+        for enemy in self._battle.player_selector.teams[1]:
+            print(enemy)
+            print('')
+
+        print('*****************')
+        self.print_turn()
+
+    def get_resume_team_texts(self, team_id):
+        result = []
+        for hero in self._battle.player_selector.teams[team_id]:
+            result.append(hero.__str__())
+
+        return result
+
+    def get_action_result_texts(self, attack, target, action_result):
+        result = list()
+
+        result.append(self._battle.player.name + ' makes a ' + attack + ' to ' + target.name)
+        result.append('')
+        result.append('***** ' + action_result + ' *****')
+
+        return result
+
+    def print_turn(self):
+        print('')
+        print(self._battle.player.name + '\'s Turn')
+
+    def _print_action_result(self, attack, target, action_result):
+        print(self._battle.player.name + ' makes a ' + attack + ' to ' + target.name + ' ')
+        print('')
+        print('***** ' + action_result + ' *****')
+
+
+class PyGameBattleGUIController(BaseBattleController):
+
+    def next_move(self):
+        attack, target, action_result = self._do_player_selection(self._battle)
+
+        return attack, target, action_result
+
+    def game_over(self):
+        return self.get_battle().is_over()
+
+    def action_selection_modal(self):
+        pass
+
+
+class UnixConsoleController(BaseBattleController):
+
+    def next_move(self):
+        self.print_resume()
+
+        attack, target, action_result = self._do_player_selection(self._battle)
+
+        print(self._battle.player.name + ' makes a ' + attack + ' to ' + target.name + ' ')
         print('')
         print('***** ' + action_result + ' *****')
         print('')
         print('Press [ENTER] to continue > ', end='')
         input()
 
-    def game_over(self, game: battle):
-        self._print_resume(game)
-        print('**DESTRUCTION**')
-        print('')
+    def game_over(self):
+        pass
 
-    def action_selection_modal(self, game: battle):
+    def action_selection_modal(self):
 
-        player_abilities = game.player.abilities
+        player_abilities = self._battle.player.abilities
 
         actions_available = player_abilities.keys()
-        enemies_available = game.alive_enemies()
+        enemies_available = self._battle.alive_enemies()
 
         target_ids = [x for x in range(1, len(enemies_available) + 1)]
 
@@ -86,20 +171,3 @@ class UnixConsoleController(BaseController):
 
         return str(target_id - 1) + '_' + move
 
-
-    def _print_resume(self, game: battle):
-        os.system('clear')
-        print('*****************')
-        print('* GOOD GUYS *')
-        for hero in game.player_selector.teams[0]:
-            print(hero)
-            print('')
-
-        print('')
-        print('* BAD GUYS *')
-        for enemy in game.player_selector.teams[1]:
-            print(enemy)
-            print('')
-
-        print('*****************')
-        print('')

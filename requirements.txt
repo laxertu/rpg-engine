@@ -1,2 +1,3 @@
 git+https://github.com/laxertu/easyAI.git
 git+https://github.com/laxertu/rpg-engine.git
+git+https://github.com/pygame/pygame.git
