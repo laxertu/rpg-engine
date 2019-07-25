@@ -11,7 +11,7 @@ class WindowManagerWrapper(WindowManager):
 
     def __init__(self, screen: pygame.Surface):
         self._screen = screen
-        self._background = screen
+        self._background = None
 
 
     def init_scene(self):
@@ -23,7 +23,6 @@ class WindowManagerWrapper(WindowManager):
         bg_image, bg_image_rect = load_image('bg.png')
         background.blit(bg_image, bg_image_rect)
         self._background = background
-        self.erase_screen()
 
     def erase_screen(self):
         self._screen.blit(self._background, (0, 0))
