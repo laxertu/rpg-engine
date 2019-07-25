@@ -30,6 +30,9 @@ class WindowManagerWrapper(WindowManager):
     def display_all(self):
         pygame.display.flip()
 
+    def set_gui_interaction_enabled(self, enabled: bool = True):
+        GuiComponent.interaction_enabled = enabled
+
 
 class StandardManager:
     def __init__(self, team1, team2):

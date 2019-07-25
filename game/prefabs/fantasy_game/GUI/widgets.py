@@ -4,7 +4,7 @@ from pygame import Rect
 from pygame.sprite import Group
 
 from game.prefabs.fantasy_game.GUI.core import load_image
-from game.prefabs.fantasy_game.GUI.mediator import TextComponent, SpriteContainerComponent, ActionsMenuComponent
+from game.prefabs.fantasy_game.GUI.mediator import GuiComponent, TextComponent, SpriteContainerComponent, ActionsMenuComponent
 from game.prefabs.fantasy_game.characters import Character, BaseAction
 
 class BaseSprite(pygame.sprite.Sprite):
@@ -72,7 +72,7 @@ class WidgetSprite(BaseSprite):
         self._active = True
 
     def update(self):
-        if not self._active:
+        if not self._active or GuiComponent.interaction_enabled == False:
             return
 
         was_mouse_over = self.mouse_over
@@ -83,7 +83,7 @@ class WidgetSprite(BaseSprite):
 
         if BaseSprite.user_clicked and self.mouse_over:
             self._widget.set_selected_sprite(self)
-            self._widget.mediator.notify_mouseover(self._widget)
+            self._widget.mediator.notify_mouseover(self._widget, self._mediator_extraparam)
             self._widget.mediator.notify_click(self._widget, self._mediator_extraparam)
 
         if was_mouse_over and not self.mouse_over:
@@ -278,6 +278,7 @@ class TeamWidget(SpriteContainer):
         self._division_middle = surface.get_rect().centerx if division_middle is None else division_middle
         self._surface = surface
 
+        self._raw_chrs= list()
 
     def get_display_text(self):
         return self.get_selected_sprite().get_display_text()
@@ -376,7 +377,7 @@ class TeamWidget(SpriteContainer):
         )
 
         widget = TextWidget(self._surface, rect, 20)
-        widget.set_text(ability_sprite.character.name + ' HP ' + str(ability_sprite.character.pf()) + '/' + str(ability_sprite.character.pf_max()))
+        widget.set_text(ability_sprite.character.name + ' HP ' + str(ability_sprite.character.pf()) + '/' + str(ability_sprite.character.pf_max()) + ' i:' + str(ability_sprite.index))
         widget.draw()
 
 

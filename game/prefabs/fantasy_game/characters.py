@@ -144,7 +144,7 @@ class Daemon(AdvAI):
 
         self._pf_max = 10
         self._pf = self._pf_max
-        self._armour = 0
+        self._armour = 6
         self._magic_resistance = 12
         self._attack = 0
         self._magic = 3
@@ -214,25 +214,28 @@ class BasePhisicalAttack(BaseAction):
 
 
     def do(self, source, dest):
-        return dest.receive_phisical_damage(self._base_damage + source.phisical_attack())
+        return dest.receive_phisical_damage(self.calculate(source, dest))
+
+    def calculate(self, source:Character, dest:Character) -> int:
+        return max(self._base_damage + source.phisical_attack() - dest.phisical_resistence(), 0)
 
     def simulate(self, source:Character, dest:Character) -> str:
-        return str(self._base_damage + source.phisical_attack()) + ' phisical damage ' + ' prob ' + str(self._probability) + '%'
+        return str(self.calculate(source, dest)) + ' phisical damage ' + ' prob ' + str(self._probability) + '%'
 
-class SwordAttack(BaseAction):
-    _base_damage = 8
+class SwordAttack(BasePhisicalAttack):
+    _base_damage = 80
     _name = 'Sword attack'
-    _probability = 70
+    _probability = 100
 
 
 class Destruction(BasePhisicalAttack):
+    _base_damage = 12
     _name = 'Destruction'
     _probability = 20
 
 
-
 class FireBall(BasePhisicalAttack):
-
+    _base_damage = 5
     _name = 'Fire ball'
     _probability = 80
 
@@ -241,10 +244,13 @@ class BasePenalty(BaseAction):
     _base_damage = 0
 
     def do(self, source: Character, dest: Character):
-        return dest.receive_magic_penalty(self._base_damage + source.magic_attack())
+        return dest.receive_magic_penalty(self.calculate(source, dest))
+
+    def calculate(self, source:Character, dest:Character) -> int:
+        return max(self._base_damage + source.magic_attack() - dest.magic_resistance(), 0)
 
     def simulate(self, source:Character, dest:Character) -> str:
-        return str(self._base_damage + source.magic_attack()) + ' phisical damage ' + ' prob ' + str(self._probability) + '%'
+        return str(self.calculate(source, dest)) + ' magic penalty ' + ' prob ' + str(self._probability) + '%'
 
 class MagicPenalty(BasePenalty):
 

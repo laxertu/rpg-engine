@@ -12,6 +12,9 @@ class WindowManager:
     def display_all(self):
         raise NotImplementedError('Abstract Method')
 
+    def set_gui_interaction_enabled(self, enabled: bool = True):
+        raise NotImplementedError('Abstract Method')
+
 
 class AbstractNotifier:
     pass
@@ -27,6 +30,7 @@ class AbstractMediator:
 class GuiComponent(AbstractNotifier):
 
     mediator = AbstractMediator()
+    interaction_enabled = True
 
 
     def __init__(self):
@@ -144,6 +148,7 @@ class PlayerTurnMediator(AbstractGuiMediator):
             txt = self._widget_player_actions_menu.get_display_text()
             self._widget_selected_action_display.set_text(txt)
 
+        if sender is self._widget_team2:
             if self._selected_action is not None:
                 txt = self._battle_wrapper.get_action_simuation_text(self._selected_action, param)
                 self._widget_selected_target_display.set_text(txt)
@@ -174,6 +179,8 @@ class PlayerTurnMediator(AbstractGuiMediator):
                     pass
                 else:
                     #AI move simulation
+                    self._window_manager.set_gui_interaction_enabled(False)
+
                     move = self._battle_wrapper.get_AI_selection()
                     print(self._battle_wrapper.get_move_txt(move))
                     self._feedback_display.set_text(self._battle_wrapper.get_move_txt(move))
@@ -185,6 +192,10 @@ class PlayerTurnMediator(AbstractGuiMediator):
                     self.redraw_all()
                     wait(2000)
                     self._widget_player_actions_menu.set_actions(self._battle_wrapper.get_possible_moves())
+                    self._widget_selected_action_display.set_text('')
+                    self._widget_selected_target_display.set_text('')
+                    self._widget_selected_target_display.set_visible(False)
+                    self._window_manager.set_gui_interaction_enabled(True)
                     if self._battle_wrapper.game_over():
                         pass
 

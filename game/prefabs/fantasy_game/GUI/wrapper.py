@@ -45,8 +45,7 @@ class BattleWrapper:
         parsed_result = raw_selection.split('_')
         target_id = int(parsed_result[0])
 
-        print(self._battle.current_opponent_team())
-        print(target_id)
+        print(raw_selection)
         target = self._battle.current_opponent_team()[target_id]
         action = self._battle.player.abilities[parsed_result[1]]
 
