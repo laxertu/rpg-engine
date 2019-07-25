@@ -39,13 +39,14 @@ class BattleWrapper:
 
     def get_move_txt(self, move):
         action, target = self._parse_move_str(move)
-        return self._battle.player.name + ': ' + action.name + ' -> ' + target.name
+        return self._battle.player.name + ': ' + action.get_name() + ' -> ' + target.name
 
     def _parse_move_str(self, raw_selection: str) -> (BaseAction, Character):
         parsed_result = raw_selection.split('_')
         target_id = int(parsed_result[0])
 
-
+        print(self._battle.current_opponent_team())
+        print(target_id)
         target = self._battle.current_opponent_team()[target_id]
         action = self._battle.player.abilities[parsed_result[1]]
 
@@ -54,3 +55,9 @@ class BattleWrapper:
 
     def game_over(self):
         return self._battle.is_over()
+
+    def get_action_simuation_text(self, action_id: str, target_id: str):
+        move = target_id+'_'+action_id
+        action, target = self._parse_move_str(move)
+
+        return action.simulate(self._battle.current_player(), target)

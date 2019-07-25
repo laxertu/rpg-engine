@@ -24,7 +24,7 @@ class AbstractMediator:
     def notify_click(self, sender: AbstractNotifier, param: None) -> None:
         pass
 
-class GuiComponent:
+class GuiComponent(AbstractNotifier):
 
     mediator = AbstractMediator()
 
@@ -61,7 +61,7 @@ class TextComponent(GuiComponent):
 class SpriteContainerComponent(GuiComponent):
 
     def get_display_text(self) -> str:
-        raise NotImplementedError('Abstract Method')
+        return ''
 
     def draw(self):
         pass
@@ -73,8 +73,6 @@ class ActionsMenuComponent(SpriteContainerComponent):
     def set_actions(self, actions: dict):
         raise NotImplementedError('Abstract Method')
 
-    def get_display_text(self) -> str:
-        raise NotImplementedError('Abstract Method')
 
 
 
@@ -138,14 +136,17 @@ class AbstractGuiMediator(AbstractMediator):
 class PlayerTurnMediator(AbstractGuiMediator):
 
 
-    def notify_mouseover(self, sender: AbstractNotifier) -> None:
+    def notify_mouseover(self, sender: AbstractNotifier, param=None) -> None:
+
+
+
         if sender is self._widget_player_actions_menu:
             txt = self._widget_player_actions_menu.get_display_text()
             self._widget_selected_action_display.set_text(txt)
 
-        if sender is self._widget_team2:
-            txt = self._widget_team2.get_display_text()
-            self._widget_selected_target_display.set_text(txt)
+            if self._selected_action is not None:
+                txt = self._battle_wrapper.get_action_simuation_text(self._selected_action, param)
+                self._widget_selected_target_display.set_text(txt)
 
         self.redraw_all()
 

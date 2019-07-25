@@ -182,79 +182,77 @@ class Troll(AdvAI):
 
 
 class BaseAction:
-    name = ''
-    desc = ''
+    _name = ''
+    _probability = 0
 
     def probability(self):
-        return 0
+        return self._probability
 
     def do(self, source: Character, dest: Character):
         return ''
 
     def __str__(self):
-        return self.name + "\n" + 'Prob ' + str(self.probability()) + '% ' + self.desc
+        return self._name + "\n" + 'Prob ' + str(self.probability()) + '% '
 
     def to_str(self):
         return str(self)
+
+    def simulate(self, source:Character, dest:Character) -> str:
+        return ''
+
+    def get_name(self):
+        return self._name
 
 class NoneAction(BaseAction):
     def to_str(self):
         return ''
 
+class BasePhisicalAttack(BaseAction):
 
-class SwordAttack(BaseAction):
+    _name = ''
+    _base_damage = 0
 
-    name = 'Sword attack'
-    desc = 'Base 8 ph damage'
-
-    def probability(self):
-        return 70
 
     def do(self, source, dest):
-        return dest.receive_phisical_damage(8 + source.phisical_attack())
+        return dest.receive_phisical_damage(self._base_damage + source.phisical_attack())
+
+    def simulate(self, source:Character, dest:Character) -> str:
+        return str(self._base_damage + source.phisical_attack()) + ' phisical damage ' + ' prob ' + str(self._probability) + '%'
+
+class SwordAttack(BaseAction):
+    _base_damage = 8
+    _name = 'Sword attack'
+    _probability = 70
 
 
-class Destruction(BaseAction):
-    name = 'Destruction'
-    desc = 'Base 12 ph damage'
-
-    def probability(self):
-        return 20
-
-    def do(self, source: Character, dest: Character):
-        return dest.receive_phisical_damage(12 + source.phisical_attack())
+class Destruction(BasePhisicalAttack):
+    _name = 'Destruction'
+    _probability = 20
 
 
-class FireBall(BaseAction):
 
-    name = 'Fire ball'
-    desc = 'Base 8 ph damage'
+class FireBall(BasePhisicalAttack):
 
-    def probability(self):
-        return 80
+    _name = 'Fire ball'
+    _probability = 80
 
-    def do(self, source: Character, dest: Character):
-        return dest.receive_magic_damage(8 + source.magic_attack())
-
-
-class MagicPenalty(BaseAction):
-
-    name = 'Magic penalty'
-    desc = 'Base 8 ph damage'
-
-    def probability(self):
-        return 50
+class BasePenalty(BaseAction):
+    _name = ''
+    _base_damage = 0
 
     def do(self, source: Character, dest: Character):
-        return dest.receive_magic_penalty(8 + source.magic_attack())
+        return dest.receive_magic_penalty(self._base_damage + source.magic_attack())
 
+    def simulate(self, source:Character, dest:Character) -> str:
+        return str(self._base_damage + source.magic_attack()) + ' phisical damage ' + ' prob ' + str(self._probability) + '%'
 
-class ArmourPenalty:
-    name = 'Armour penalty'
-    desc = 'Base 3 base armour penalty'
+class MagicPenalty(BasePenalty):
 
-    def probability(self):
-        return 20
+    _name = 'Magic penalty'
+    _base_damage = 10
+    _probability = 50
 
-    def do(self, source: Character, dest: Character):
-        return dest.receive_armour_penalty(3 + source.magic_attack())
+class ArmourPenalty(BasePenalty):
+    _name = 'Armour penalty'
+    _base_damage = 3
+    _probability = 20

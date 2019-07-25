@@ -68,7 +68,7 @@ class WidgetSprite(BaseSprite):
     def __init__(self, widget: SpriteContainer):
         super().__init__()
         self._widget = widget
-        self._onclick_extraparam = None
+        self._mediator_extraparam = None
         self._active = True
 
     def update(self):
@@ -84,7 +84,7 @@ class WidgetSprite(BaseSprite):
         if BaseSprite.user_clicked and self.mouse_over:
             self._widget.set_selected_sprite(self)
             self._widget.mediator.notify_mouseover(self._widget)
-            self._widget.mediator.notify_click(self._widget, self._onclick_extraparam)
+            self._widget.mediator.notify_click(self._widget, self._mediator_extraparam)
 
         if was_mouse_over and not self.mouse_over:
             self._widget.reset_onmouseover_sprite()
@@ -92,7 +92,7 @@ class WidgetSprite(BaseSprite):
 
         if not was_mouse_over and self.mouse_over:
             self._widget.set_mouseover_sprite(self)
-            self._widget.mediator.notify_mouseover(self._widget)
+            self._widget.mediator.notify_mouseover(self._widget, self._mediator_extraparam)
 
 
 
@@ -101,7 +101,7 @@ class ActionButtonSprite(WidgetSprite):
     def __init__(self, action, action_index, widget: SpriteContainer):
         WidgetSprite.__init__(self, widget)
         self._action = action
-        self._onclick_extraparam = action_index
+        self._mediator_extraparam = action_index
 
         self.image, self.rect = load_image(type(action).__name__ + '.png')
         self.index = action_index
@@ -137,7 +137,7 @@ class ChrSprite(WidgetSprite):
 
     def set_index(self, index: int):
         self.index = index
-        self._onclick_extraparam = index
+        self._mediator_extraparam = str(index)
 
     def get_display_text(self):
         return self.character.name
@@ -327,6 +327,7 @@ class TeamWidget(SpriteContainer):
         for character_sprite in self._sprites.sprites():
             if character_sprite.character.pf() > 0:
                 character_sprite.set_index(i)
+                i += 1
 
 
     def update(self):
