@@ -68,3 +68,6 @@ class AdvPlayerSelector(AbstractOrderedPlayerSelector):
 
     def current_team_id(self) -> int:
         return self._current_team_id()
+
+    def current_opposite_team_id(self):
+        return (self.current_team_id() + 1) % 2

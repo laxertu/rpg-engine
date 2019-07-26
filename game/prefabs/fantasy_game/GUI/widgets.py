@@ -142,6 +142,11 @@ class ChrSprite(WidgetSprite):
     def get_display_text(self):
         return self.character.name
 
+    def update(self):
+        if self.character.pf() <= 0:
+            self._active = False
+        super().update()
+
 class PlayerActionsMenu(ActionsMenuComponent, SpriteContainer):
 
     def __init__(self, surface: pygame.Surface, top: int, left: int, sprite_spacing: int = 0):
@@ -316,24 +321,6 @@ class TeamWidget(SpriteContainer):
 
             sprites.append(sprite)
         return sprites
-
-    def _reindex(self):
-        """
-        workaround for compatibility with Battle's player selector: index property have to be in sync with
-        team indices. TODO fix this
-
-        :return:
-        """
-        i = 0
-        for character_sprite in self._sprites.sprites():
-            if character_sprite.character.pf() > 0:
-                character_sprite.set_index(i)
-                i += 1
-
-
-    def update(self):
-        self._reindex()
-        super().update()
 
     def get_rect(self) -> Rect:
         sprites = self._sprites.sprites()
