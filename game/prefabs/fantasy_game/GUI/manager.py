@@ -5,7 +5,9 @@ from game.prefabs.fantasy_game.GUI.widgets import PlayerActionsMenu, TeamWidget,
 from game.prefabs.fantasy_game.GUI.wrapper import BattleWrapper
 from game.prefabs.fantasy_game.GUI.core import load_image
 
-from game.prefabs.fantasy_game.GUI.mediator import GuiComponent, PlayerTurnMediator, WindowManager
+from game.prefabs.fantasy_game.GUI.mediator import PlayerTurnMediator
+from game.battle.GUI.mediator import GuiComponent
+from game.battle.GUI.mediator import WindowManager
 
 class WindowManagerWrapper(WindowManager):
 

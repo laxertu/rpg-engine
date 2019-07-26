@@ -4,7 +4,7 @@ from pygame import Rect
 from pygame.sprite import Group
 
 from game.prefabs.fantasy_game.GUI.core import load_image
-from game.prefabs.fantasy_game.GUI.mediator import GuiComponent, TextComponent, SpriteContainerComponent, ActionsMenuComponent
+from game.battle.GUI.mediator import SpriteContainerComponent, GuiComponent, ActionsMenuComponent, TextComponent
 from game.prefabs.fantasy_game.characters import Character, BaseAction
 
 class BaseSprite(pygame.sprite.Sprite):
@@ -225,7 +225,7 @@ class TextWidget(TextComponent):
     def visible(self) -> bool:
         return self._visible
 
-    def _draw(self):
+    def do_draw(self):
         self._items_to_draw = []
         surface = self._surface
         for txt in self._txt_chunks:
