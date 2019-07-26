@@ -6,9 +6,33 @@ class AbstractNotifier:
     pass
 
 
+class WindowManager:
+    def init_scene(self):
+        raise NotImplementedError('Abstract Method')
+
+    def erase_screen(self):
+        raise NotImplementedError('Abstract Method')
+
+    def display_all(self):
+        raise NotImplementedError('Abstract Method')
+
+    def set_gui_interaction_enabled(self, enabled: bool = True):
+        raise NotImplementedError('Abstract Method')
+
+class DefaultMediator:
+
+    def notify_mouseover(self, sender: AbstractNotifier) -> None:
+        pass
+    def notify_mouseout(self, sender: AbstractNotifier) -> None:
+        pass
+    def notify_click(self, sender: AbstractNotifier, param: None) -> None:
+        pass
+
+
+
 class GuiComponent(AbstractNotifier):
 
-    mediator = None
+    mediator = DefaultMediator()
     interaction_enabled = True
 
 
@@ -56,28 +80,6 @@ class SpriteContainerComponent(GuiComponent):
 class ActionsMenuComponent(SpriteContainerComponent):
     def set_actions(self, actions: dict):
         raise NotImplementedError('Abstract Method')
-
-class WindowManager:
-    def init_scene(self):
-        raise NotImplementedError('Abstract Method')
-
-    def erase_screen(self):
-        raise NotImplementedError('Abstract Method')
-
-    def display_all(self):
-        raise NotImplementedError('Abstract Method')
-
-    def set_gui_interaction_enabled(self, enabled: bool = True):
-        raise NotImplementedError('Abstract Method')
-
-class DefaultMediator:
-
-    def notify_mouseover(self, sender: AbstractNotifier) -> None:
-        pass
-    def notify_mouseout(self, sender: AbstractNotifier) -> None:
-        pass
-    def notify_click(self, sender: AbstractNotifier, param: None) -> None:
-        pass
 
 class AbstractMediator(DefaultMediator):
     """
