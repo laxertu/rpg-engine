@@ -180,6 +180,8 @@ class PlayerTurnMediator(AbstractGuiMediator):
                 else:
                     #AI move simulation
                     self._window_manager.set_gui_interaction_enabled(False)
+                    self._feedback_display.set_visible(False)
+                    self.redraw_all()
 
                     move = self._battle_wrapper.get_AI_selection()
                     print(self._battle_wrapper.get_move_txt(move))
@@ -191,6 +193,10 @@ class PlayerTurnMediator(AbstractGuiMediator):
                     self._feedback_display.set_text(result)
                     self.redraw_all()
                     wait(2000)
+                    self._feedback_display.set_visible(False)
+                    self.redraw_all()
+
+
                     self._widget_player_actions_menu.set_actions(self._battle_wrapper.get_possible_moves())
                     self._widget_selected_action_display.set_text('')
                     self._widget_selected_target_display.set_text('')
