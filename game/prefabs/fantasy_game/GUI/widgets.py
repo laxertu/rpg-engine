@@ -4,7 +4,7 @@ from pygame import Rect
 from pygame.sprite import Group
 
 from game.prefabs.fantasy_game.GUI.core import load_image
-from game.battle.GUI.mediator import SpriteContainerComponent, GuiComponent, ActionsMenuComponent, TextComponent
+from game.battle.GUI.mediator import SpriteContainerComponent, ActionsMenuComponent, TextComponent
 from game.prefabs.fantasy_game.characters import Character, BaseAction
 
 class BaseSprite(pygame.sprite.Sprite):
