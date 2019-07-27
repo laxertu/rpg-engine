@@ -9,6 +9,7 @@ class AbstractGuiMediator(AbstractMediator):
 
     def reset_scene_components(self):
         self._widget_selected_action_display.set_text('Select action')
+        self._widget_player_actions_menu.set_actions(self._battle_wrapper.get_possible_moves())
 
         self._widget_selected_target_display.set_text('')
         self._widget_selected_target_display.set_visible(False)
@@ -23,8 +24,6 @@ class PlayerTurnMediator(AbstractGuiMediator):
 
 
     def notify_mouseover(self, sender: AbstractNotifier, param=None) -> None:
-
-
 
         if sender is self._widget_player_actions_menu:
             txt = self._widget_player_actions_menu.get_display_text()
@@ -58,7 +57,7 @@ class PlayerTurnMediator(AbstractGuiMediator):
                 wait(2000)
 
                 if self._battle_wrapper.game_over():
-                    pass
+                    self._window_manager.display_endgame()
                 else:
                     #AI move simulation
                     self.redraw_all()
@@ -75,11 +74,15 @@ class PlayerTurnMediator(AbstractGuiMediator):
                     self.redraw_all()
                     wait(2000)
 
-                    self._feedback_display.set_visible(False)
-
                     self.reset_scene_components()
                     self.redraw_all()
-                    if self._battle_wrapper.game_over():
-                        pass
 
-        self.redraw_all()
+                    self._feedback_display.set_visible(False)
+
+                    #self.reset_scene_components()
+                    self.redraw_all()
+
+        if self._battle_wrapper.game_over():
+            self._window_manager.display_endgame()
+        else:
+            self.redraw_all()

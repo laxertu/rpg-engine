@@ -192,7 +192,7 @@ class BaseAction:
         return ''
 
     def __str__(self):
-        return self._name + "\n" + 'Prob ' + str(self.probability()) + '% '
+        return self._name
 
     def to_str(self):
         return str(self)
@@ -220,12 +220,12 @@ class BasePhisicalAttack(BaseAction):
         return max(self._base_damage + source.phisical_attack() - dest.phisical_resistence(), 0)
 
     def simulate(self, source:Character, dest:Character) -> str:
-        return str(self.calculate(source, dest)) + ' phisical damage ' + ' prob ' + str(self._probability) + '%'
+        return dest.name + "\n" + str(self.calculate(source, dest)) + ' phisical damage ' + "\n" + 'Prob ' + str(self._probability) + '%'
 
 class SwordAttack(BasePhisicalAttack):
-    _base_damage = 80
+    _base_damage = 8
     _name = 'Sword attack'
-    _probability = 100
+    _probability = 80
 
 
 class Destruction(BasePhisicalAttack):

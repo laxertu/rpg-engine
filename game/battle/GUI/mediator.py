@@ -53,20 +53,28 @@ class GuiComponent(AbstractNotifier):
     def do_draw(self):
         pass
 
-class TextComponent(GuiComponent):
+class AbstractTextComponent(GuiComponent):
 
     def set_text(self, txt: str):
         raise NotImplementedError('Abstract Method')
 
 
-class SpriteContainerComponent(GuiComponent):
+class AbstractSelectorComponent(GuiComponent):
 
     def get_display_text(self) -> str:
         """
         TODO: move to more specific class
         :return:
         """
+        return ''
+
+    def set_display_text(self, txt: str):
+        """
+        TODO: move to more specific class
+        :return:
+        """
         pass
+
 
     def draw(self):
         pass
@@ -74,15 +82,15 @@ class SpriteContainerComponent(GuiComponent):
     def reset_selection(self):
         pass
 
-class ActionsMenuComponent(SpriteContainerComponent):
+class ActionsMenuComponent(AbstractSelectorComponent):
     def set_actions(self, actions: dict):
         raise NotImplementedError('Abstract Method')
 
 class ComponentFactory:
-    def create_textbox(self) -> TextComponent:
+    def create_textbox(self) -> AbstractTextComponent:
         raise NotImplementedError('Abstract Method')
 
-    def create_sprite_container(self) -> SpriteContainerComponent:
+    def create_sprite_container(self) -> AbstractSelectorComponent:
         raise NotImplementedError('Abstract Method')
 
     def create_actions_menu(self):
@@ -94,12 +102,12 @@ class AbstractMediator(DefaultMediator):
     """
 
     def __init__(self,
-                 tw1: SpriteContainerComponent, tw2: SpriteContainerComponent,
+                 tw1: AbstractSelectorComponent, tw2: AbstractSelectorComponent,
                  pam:ActionsMenuComponent,
-                 sad: TextComponent, std: TextComponent,
+                 sad: AbstractTextComponent, std: AbstractTextComponent,
                  bw: BattleWrapper,
                  wm: WindowManager,
-                 fd: TextComponent
+                 fd: AbstractTextComponent
                  ):
 
         # widgets

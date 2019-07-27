@@ -1,9 +1,10 @@
 import pygame
 from pygame.locals import *
 
-from game.prefabs.fantasy_game.GUI.widgets import PlayerActionsMenu, TeamWidget, TextWidget, BaseSprite
+from game.battle.GUI.graphics.pygame.component import AbstractWidgetSprite
+from game.battle.GUI.graphics.pygame.widgets import PlayerActionsMenu, TeamWidget, TextWidget
 from game.prefabs.fantasy_game.GUI.wrapper import BattleWrapper
-from game.prefabs.fantasy_game.GUI.core import load_image
+from game.battle.GUI.graphics.pygame.core import load_image
 
 from game.prefabs.fantasy_game.GUI.mediator import PlayerTurnMediator
 from game.battle.GUI.mediator import GuiComponent
@@ -33,10 +34,12 @@ class WindowManagerWrapper(WindowManager):
         pygame.display.flip()
 
     def display_endgame(self):
+
         rt_widget = pygame.font.SysFont('Comic Sans MS', 100)
         rect_to_use = pygame.Rect(280, 150, 500, 20)
         widget = rt_widget.render('The end', True, (255, 0, 0), (255, 255, 255))
         pygame.display.get_surface().blit(widget, rect_to_use)
+        self.display_all()
 
 class StandardManager:
     def __init__(self, team1, team2):
@@ -66,15 +69,14 @@ class StandardManager:
         self._selected_target_display = TextWidget(surface=self._screen, size=20, rect=pygame.Rect(550, 10, 300, 100))
         self._player_actions_menu = PlayerActionsMenu(surface=self._screen, top=10, left=10, sprite_spacing=10)
 
-        self._feedback_display = TextWidget(surface=self._screen, size=20, rect=pygame.Rect(200, 120, 300, 100))
+        self._feedback_display = TextWidget(surface=self._screen, size=20, rect=pygame.Rect(200, 120, 700, 100))
 
 
         bw = BattleWrapper(team1, team2)
         wm = WindowManagerWrapper(self._screen)
-        self._wm = wm
 
         self._bw = bw
-        self._player_actions_menu.set_actions(bw.get_possible_moves())
+        #self._player_actions_menu.set_actions(bw.get_possible_moves())
         self._is_over = False
 
         GuiComponent.mediator = PlayerTurnMediator(
@@ -101,13 +103,12 @@ class StandardManager:
 
             if not self._is_over:
                 if event.type == MOUSEBUTTONDOWN:
-                    BaseSprite.user_clicked = True
+                    AbstractWidgetSprite.user_clicked = True
                     self._update_interactive_widgets()
-                    BaseSprite.user_clicked = False
+                    AbstractWidgetSprite.user_clicked = False
 
                 # iteration code here
                 if self._bw.game_over():
-                    self._wm.display_endgame()
                     self._is_over = True
                 else:
                     self._update_interactive_widgets()

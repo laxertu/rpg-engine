@@ -9,7 +9,7 @@ t1 = [c.Knight('Percebal'), c.Wizard('Langostin')]
 #t2 = [c.Knight('Percebal2'), c.Wizard('Langostin2')]
 
 #t1 = [c.EvilNun(Negamax(4), name="MT"), c.Daemon(Negamax(4), name='Sauron')]
-t2 = [c.EvilNun(Negamax(4), name="MT"), c.Daemon(Negamax(4), name='Sauron')]
+t2 = [c.EvilNun(Negamax(4), name="Madre Teresa de Calcuta"), c.Daemon(Negamax(4), name='Sauron')]
 
 
 class BattleGui:
