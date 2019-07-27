@@ -91,6 +91,7 @@ class WidgetSprite(BaseSprite):
             self._widget.mediator.notify_mouseout(self._widget)
 
         if not was_mouse_over and self.mouse_over:
+            print('over')
             self._widget.set_mouseover_sprite(self)
             self._widget.mediator.notify_mouseover(self._widget, self._mediator_extraparam)
 

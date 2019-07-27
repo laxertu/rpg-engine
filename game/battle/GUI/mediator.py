@@ -124,10 +124,10 @@ class AbstractMediator(DefaultMediator):
 
     def init_scene(self):
         self._window_manager.init_scene()
-        self.init_scene_components()
+        self.reset_scene_components()
         self.redraw_all()
 
-    def init_scene_components(self):
+    def reset_scene_components(self):
         pass
 
     def redraw_all(self):

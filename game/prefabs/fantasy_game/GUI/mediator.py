@@ -7,16 +7,13 @@ from pygame.time import wait
 
 class AbstractGuiMediator(AbstractMediator):
 
-    def init_scene_components(self):
-        self._widget_selected_target_display.set_visible(False)
-        self._feedback_display.set_visible(False)
-
-    def reset_components_setup(self):
-        self._widget_selected_action_display.set_text('')
-        self._widget_selected_action_display.set_visible(False)
+    def reset_scene_components(self):
+        self._widget_selected_action_display.set_text('Select action')
 
         self._widget_selected_target_display.set_text('')
         self._widget_selected_target_display.set_visible(False)
+
+        self._feedback_display.set_visible(False)
 
         self._widget_player_actions_menu.reset_selection()
         self._widget_team1.reset_selection()
@@ -64,8 +61,6 @@ class PlayerTurnMediator(AbstractGuiMediator):
                     pass
                 else:
                     #AI move simulation
-                    self._window_manager.set_gui_interaction_enabled(False)
-                    self._feedback_display.set_visible(False)
                     self.redraw_all()
 
                     move = self._battle_wrapper.get_AI_selection()
@@ -75,18 +70,15 @@ class PlayerTurnMediator(AbstractGuiMediator):
                     wait(2000)
 
                     result = self._battle_wrapper.do_AI_move(move)
+                    print(result)
                     self._feedback_display.set_text(result)
                     self.redraw_all()
                     wait(2000)
+
                     self._feedback_display.set_visible(False)
+
+                    self.reset_scene_components()
                     self.redraw_all()
-
-
-                    self._widget_player_actions_menu.set_actions(self._battle_wrapper.get_possible_moves())
-                    self._widget_selected_action_display.set_text('')
-                    self._widget_selected_target_display.set_text('')
-                    self._widget_selected_target_display.set_visible(False)
-                    self._window_manager.set_gui_interaction_enabled(True)
                     if self._battle_wrapper.game_over():
                         pass
 
