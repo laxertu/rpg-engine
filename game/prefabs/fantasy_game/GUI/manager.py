@@ -32,9 +32,11 @@ class WindowManagerWrapper(WindowManager):
     def display_all(self):
         pygame.display.flip()
 
-    def set_gui_interaction_enabled(self, enabled: bool = True):
-        GuiComponent.interaction_enabled = enabled
-
+    def display_endgame(self):
+        rt_widget = pygame.font.SysFont('Comic Sans MS', 100)
+        rect_to_use = pygame.Rect(280, 150, 500, 20)
+        widget = rt_widget.render('The end', True, (255, 0, 0), (255, 255, 255))
+        pygame.display.get_surface().blit(widget, rect_to_use)
 
 class StandardManager:
     def __init__(self, team1, team2):
@@ -69,6 +71,7 @@ class StandardManager:
 
         bw = BattleWrapper(team1, team2)
         wm = WindowManagerWrapper(self._screen)
+        self._wm = wm
 
         self._bw = bw
         self._player_actions_menu.set_actions(bw.get_possible_moves())
@@ -104,7 +107,7 @@ class StandardManager:
 
                 # iteration code here
                 if self._bw.game_over():
-                    self._the_end(self._screen)
+                    self._wm.display_endgame()
                     self._is_over = True
                 else:
                     self._update_interactive_widgets()
@@ -112,14 +115,6 @@ class StandardManager:
         return going
 
 
-
-    def _the_end(self, screen):
-        rt_widget = pygame.font.SysFont('Comic Sans MS', 100)
-        rect_to_use = pygame.Rect(280, 150, 500, 20)
-        widget = rt_widget.render('The end', True, (255, 0, 0), (255, 255, 255))
-        screen.blit(widget, rect_to_use)
-
-        pygame.display.flip()
 
     def _update_interactive_widgets(self):
         self._player_actions_menu.update()

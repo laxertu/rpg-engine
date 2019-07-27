@@ -16,8 +16,8 @@ class WindowManager:
     def display_all(self):
         raise NotImplementedError('Abstract Method')
 
-    def set_gui_interaction_enabled(self, enabled: bool = True):
-        raise NotImplementedError('Abstract Method')
+    def display_endgame(self):
+        raise NotImplementedError('Abstract method')
 
 class DefaultMediator:
 
@@ -29,12 +29,9 @@ class DefaultMediator:
         pass
 
 
-
 class GuiComponent(AbstractNotifier):
 
     mediator = DefaultMediator()
-    interaction_enabled = True
-
 
     def __init__(self):
         super().__init__()
@@ -79,6 +76,16 @@ class SpriteContainerComponent(GuiComponent):
 
 class ActionsMenuComponent(SpriteContainerComponent):
     def set_actions(self, actions: dict):
+        raise NotImplementedError('Abstract Method')
+
+class ComponentFactory:
+    def create_textbox(self) -> TextComponent:
+        raise NotImplementedError('Abstract Method')
+
+    def create_sprite_container(self) -> SpriteContainerComponent:
+        raise NotImplementedError('Abstract Method')
+
+    def create_actions_menu(self):
         raise NotImplementedError('Abstract Method')
 
 class AbstractMediator(DefaultMediator):

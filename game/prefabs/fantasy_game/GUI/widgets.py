@@ -72,7 +72,7 @@ class WidgetSprite(BaseSprite):
         self._active = True
 
     def update(self):
-        if not self._active or GuiComponent.interaction_enabled == False:
+        if not self._active:
             return
 
         was_mouse_over = self.mouse_over

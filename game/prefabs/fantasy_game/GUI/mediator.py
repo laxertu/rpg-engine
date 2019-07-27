@@ -5,12 +5,22 @@ from game.battle.GUI.mediator import AbstractMediator
 from pygame.time import wait
 
 
-
 class AbstractGuiMediator(AbstractMediator):
 
     def init_scene_components(self):
         self._widget_selected_target_display.set_visible(False)
         self._feedback_display.set_visible(False)
+
+    def reset_components_setup(self):
+        self._widget_selected_action_display.set_text('')
+        self._widget_selected_action_display.set_visible(False)
+
+        self._widget_selected_target_display.set_text('')
+        self._widget_selected_target_display.set_visible(False)
+
+        self._widget_player_actions_menu.reset_selection()
+        self._widget_team1.reset_selection()
+        self._widget_team2.reset_selection()
 
 class PlayerTurnMediator(AbstractGuiMediator):
 
