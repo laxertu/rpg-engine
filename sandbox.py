@@ -2,7 +2,12 @@ import pygame
 
 import game.prefabs.fantasy_game.characters as c
 from easyAI import Negamax
-from game.prefabs.fantasy_game.GUI.manager import StandardManager
+
+# SETUP
+
+from game.prefabs.fantasy_game.manager import Manager
+
+
 
 # TEAMS
 t1 = [c.Knight('Percebal'), c.Wizard('Langostin')]
@@ -18,7 +23,7 @@ class BattleGui:
 
     def show(self, team1, team2):
 
-        self._change_manager = StandardManager(team1, team2)
+        self._change_manager = Manager(team1, team2)
         #self._change_manager.init_scene()
 
         while self._change_manager.next():

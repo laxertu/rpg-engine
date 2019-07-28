@@ -3,7 +3,7 @@ from pygame.locals import *
 
 from game.battle.GUI.graphics.pygame.component import AbstractWidgetSprite
 from game.battle.GUI.graphics.pygame.widgets import PlayerActionsMenu, TeamWidget, TextWidget
-from game.prefabs.fantasy_game.GUI.wrapper import BattleWrapper
+from game.battle.wrapper import BattleWrapper
 from game.battle.GUI.graphics.pygame.core import load_image
 
 from game.prefabs.fantasy_game.GUI.mediator import PlayerTurnMediator

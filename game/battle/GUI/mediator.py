@@ -1,4 +1,4 @@
-from game.prefabs.fantasy_game.GUI.wrapper import BattleWrapper
+from game.battle.wrapper import BattleWrapper
 
 
 
@@ -19,19 +19,9 @@ class WindowManager:
     def display_endgame(self):
         raise NotImplementedError('Abstract method')
 
-class DefaultMediator:
-
-    def notify_mouseover(self, sender: AbstractNotifier) -> None:
-        pass
-    def notify_mouseout(self, sender: AbstractNotifier) -> None:
-        pass
-    def notify_click(self, sender: AbstractNotifier, param: None) -> None:
-        pass
-
-
 class GuiComponent(AbstractNotifier):
 
-    mediator = DefaultMediator()
+    mediator = None
 
     def __init__(self):
         super().__init__()
@@ -96,7 +86,7 @@ class ComponentFactory:
     def create_actions_menu(self):
         raise NotImplementedError('Abstract Method')
 
-class AbstractMediator(DefaultMediator):
+class AbstractMediator:
     """
     TODO: rename with concrete class
     """
@@ -130,6 +120,13 @@ class AbstractMediator(DefaultMediator):
         self._selected_action = None
         #self._selected_target = None
 
+    def notify_mouseover(self, sender: AbstractNotifier) -> None:
+        pass
+    def notify_mouseout(self, sender: AbstractNotifier) -> None:
+        pass
+    def notify_click(self, sender: AbstractNotifier, param: None) -> None:
+        pass
+
     def init_scene(self):
         self._window_manager.init_scene()
         self.reset_scene_components()
@@ -150,5 +147,3 @@ class AbstractMediator(DefaultMediator):
 
 
         self._window_manager.display_all()
-
-GuiComponent.mediator = DefaultMediator()
