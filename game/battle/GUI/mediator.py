@@ -5,20 +5,6 @@ from game.battle.wrapper import BattleWrapper
 class AbstractNotifier:
     pass
 
-
-class WindowManager:
-    def init_scene(self):
-        raise NotImplementedError('Abstract Method')
-
-    def erase_screen(self):
-        raise NotImplementedError('Abstract Method')
-
-    def display_all(self):
-        raise NotImplementedError('Abstract Method')
-
-    def display_endgame(self):
-        raise NotImplementedError('Abstract method')
-
 class GuiComponent(AbstractNotifier):
 
     mediator = None
@@ -75,6 +61,25 @@ class AbstractSelectorComponent(GuiComponent):
 class ActionsMenuComponent(AbstractSelectorComponent):
     def set_actions(self, actions: dict):
         raise NotImplementedError('Abstract Method')
+
+
+class WindowManager:
+    def init_scene(self):
+        raise NotImplementedError('Abstract Method')
+
+    def erase_screen(self):
+        raise NotImplementedError('Abstract Method')
+
+    @staticmethod
+    def update_display_text(display: AbstractTextComponent, txt: str):
+        display.set_text(txt)
+
+    def display_all(self):
+        raise NotImplementedError('Abstract Method')
+
+    def display_endgame(self):
+        raise NotImplementedError('Abstract method')
+
 
 class ComponentFactory:
     def create_textbox(self) -> AbstractTextComponent:

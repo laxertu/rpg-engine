@@ -26,14 +26,17 @@ class PlayerTurnMediator(AbstractGuiMediator):
     def notify_mouseover(self, sender: AbstractNotifier, param=None) -> None:
 
         if sender is self._widget_player_actions_menu:
-            txt = self._widget_player_actions_menu.get_display_text()
-            self._widget_selected_action_display.set_text(txt)
+            self._window_manager.update_display_text(
+                self._widget_selected_action_display,
+                self._widget_player_actions_menu.get_display_text()
+            )
 
         if sender is self._widget_team2:
             if self._selected_action is not None:
-                txt = self._battle_wrapper.get_action_simuation_text(self._selected_action, param)
-                self._widget_selected_target_display.set_text(txt)
-
+                self._window_manager.update_display_text(
+                    self._widget_selected_target_display,
+                    self._battle_wrapper.get_action_simuation_text(self._selected_action, param)
+                )
         self.redraw_all()
 
     def notify_mouseout(self, sender: AbstractNotifier):
