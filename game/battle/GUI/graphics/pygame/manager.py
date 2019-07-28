@@ -1,14 +1,16 @@
 import pygame
 from pygame.locals import *
 
-from game.battle.GUI.graphics.pygame.component import AbstractWidgetSprite
-from game.battle.GUI.graphics.pygame.widgets import PlayerActionsMenu, TeamWidget, TextWidget
+from game.battle.GUI.graphics.pygame.component import AbstractWidgetSprite, AbstractTextComponent, PlayerActionsMenu
+from game.battle.GUI.graphics.pygame.component import TeamWidget, TextWidget
+
 from game.battle.wrapper import BattleWrapper
 from game.battle.GUI.graphics.pygame.core import load_image
 
 from game.prefabs.fantasy_game.GUI.mediator import PlayerTurnMediator
 from game.battle.GUI.mediator import GuiComponent
 from game.battle.GUI.mediator import WindowManager
+from game.battle.GUI.manager import AbstractBattleManager
 
 class WindowManagerWrapper(WindowManager):
 
@@ -33,6 +35,9 @@ class WindowManagerWrapper(WindowManager):
     def display_all(self):
         pygame.display.flip()
 
+    def update_display_text(self, display: AbstractTextComponent, txt: str):
+        display.set_text(txt)
+
     def display_endgame(self):
 
         rt_widget = pygame.font.SysFont('Comic Sans MS', 100)
@@ -41,8 +46,11 @@ class WindowManagerWrapper(WindowManager):
         pygame.display.get_surface().blit(widget, rect_to_use)
         self.display_all()
 
-class StandardManager:
+class StandardManager(AbstractBattleManager):
     def __init__(self, team1, team2):
+
+        super().__init__(team1, team2)
+
         self._screen = pygame.display.set_mode((1024, 768))
         self._background = None
         # team 1

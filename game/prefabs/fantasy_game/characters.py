@@ -1,11 +1,11 @@
-from game.battle.battle import Battle
+from game.battle.battle import BaseAction, AbstractCharacter, Battle
 from easyAI import AI_Player
 
-
-class Character:
+class Character(AbstractCharacter):
 
     def __init__(self, name: str):
-        self.name = name
+
+        super().__init__(name)
 
         self._level = 0
         self._pf_max = 20
@@ -23,16 +23,11 @@ class Character:
 
     def __str__(self):
         result = ''
-        result += self.name + ' [' + type(self).__name__+']'
+        result += self.name + "\n" + ' HP ' + str(self.pf()) + '/' + str(self.pf_max())
+        return result
 
-        result += '[HP]: ' + str(self.pf())
-        if self._armour_penalty:
-            result += ' [ARMOUR PENALTY]'
-
-        if self._magic_penalty:
-            result += ' [MAGIC PENALTY]'
-
-        return result + '           '
+    def to_str(self):
+        return str(self)
 
     def pf(self):
         return max(0, self._pf)
@@ -83,17 +78,20 @@ class Character:
         self._magic_penalty += amount
         return self.name + ': -' + str(amount) + ' magic defense'
 
-    def possible_moves(self, game: Battle):
+    def possible_moves(self, battle: Battle):
         return self.abilities.keys()
 
     def scoring(self):
         return self.magic_resistance() + self.magic_attack() + self.phisical_resistence() + self.phisical_attack()
 
+    def active(self) -> bool:
+        return self.pf() > 0
 
 class HumanPlayer(Character):
+    pass
 
-    def ask_move(self, game: Battle):
-        return None
+
+
 
 
 class Knight(HumanPlayer):
@@ -109,6 +107,7 @@ class Knight(HumanPlayer):
         self._magic = 0
 
         self.abilities = {'1': SwordAttack(), '2': Destruction()}
+
 
 
 class Wizard(HumanPlayer):
@@ -180,34 +179,16 @@ class Troll(AdvAI):
 
         self.abilities = {'1': ArmourPenalty(), '2': Destruction()}
 
+class Action(BaseAction):
 
-class BaseAction:
-    _name = ''
-    _probability = 0
+    def do(self, source: AbstractCharacter, dest: AbstractCharacter):
+        pass
 
-    def probability(self):
-        return self._probability
+    def simulate(self, source: AbstractCharacter, dest: AbstractCharacter) -> str:
+        pass
 
-    def do(self, source: Character, dest: Character):
-        return ''
 
-    def __str__(self):
-        return self._name
-
-    def to_str(self):
-        return str(self)
-
-    def simulate(self, source:Character, dest:Character) -> str:
-        return ''
-
-    def get_name(self):
-        return self._name
-
-class NoneAction(BaseAction):
-    def to_str(self):
-        return ''
-
-class BasePhisicalAttack(BaseAction):
+class BasePhisicalAttack(Action):
 
     _name = ''
     _base_damage = 0
@@ -239,7 +220,7 @@ class FireBall(BasePhisicalAttack):
     _name = 'Fire ball'
     _probability = 80
 
-class BasePenalty(BaseAction):
+class BasePenalty(Action):
     _name = ''
     _base_damage = 0
 

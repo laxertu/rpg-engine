@@ -1,6 +1,19 @@
 from easyAI.TwoTeamsGame import TwoTeamsGame, AbstractOrderedPlayerSelector
 from random import randint
 
+
+class AbstractCharacter:
+
+    def __init__(self, name: str):
+        self.name = name
+
+    def active(self) -> bool:
+        raise NotImplementedError('Abstract method')
+
+    def to_str(self):
+        return ''
+
+
 class Battle(TwoTeamsGame):
     def raw_teams(self):
         return self.player_selector.teams
@@ -62,7 +75,7 @@ class Battle(TwoTeamsGame):
 class AdvPlayerSelector(AbstractOrderedPlayerSelector):
 
     def filter_team(self, team: list):
-        ret = [e for e in team if e.pf() > 0]
+        ret = [e for e in team if e.active()]
 
         return ret
 
@@ -71,3 +84,36 @@ class AdvPlayerSelector(AbstractOrderedPlayerSelector):
 
     def current_opposite_team_id(self):
         return (self.current_team_id() + 1) % 2
+
+class BaseAction:
+    _name = ''
+    _probability = 0
+
+    def probability(self):
+        return self._probability
+
+    def do(self, source: AbstractCharacter, dest: AbstractCharacter):
+        raise NotImplementedError('Abstract method')
+
+    def __str__(self):
+        return self._name
+
+    def to_str(self):
+        return str(self)
+
+    def simulate(self, source:AbstractCharacter, dest:AbstractCharacter) -> str:
+        raise NotImplementedError('Abstract method')
+
+    def get_name(self):
+        return self._name
+
+class NoneAction(BaseAction):
+    def to_str(self):
+        return ''
+
+    def do(self, source: AbstractCharacter, dest: AbstractCharacter):
+        pass
+
+    def simulate(self, source: AbstractCharacter, dest: AbstractCharacter) -> str:
+        return ''
+

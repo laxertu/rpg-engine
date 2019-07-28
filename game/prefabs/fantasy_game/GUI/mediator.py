@@ -24,7 +24,6 @@ class PlayerTurnMediator(AbstractGuiMediator):
 
 
     def notify_mouseover(self, sender: AbstractNotifier, param=None) -> None:
-
         if sender is self._widget_player_actions_menu:
             self._window_manager.update_display_text(
                 self._widget_selected_action_display,
