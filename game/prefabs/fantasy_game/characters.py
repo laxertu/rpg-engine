@@ -1,4 +1,4 @@
-from game.prefabs.fantasy_game.battle import Battle
+from game.battle.battle import Battle
 from easyAI import AI_Player
 
 

@@ -1,4 +1,4 @@
-from game.prefabs.fantasy_game.battle import Battle, AdvPlayerSelector
+from game.battle.battle import Battle, AdvPlayerSelector
 from game.prefabs.fantasy_game.characters import Character, BaseAction
 
 class BattleWrapper:

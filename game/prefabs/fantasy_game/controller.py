@@ -1,5 +1,5 @@
-from game.prefabs.fantasy_game.battle import Battle
-from game.prefabs.fantasy_game.battle import AdvPlayerSelector
+from game.battle.battle import Battle
+from game.battle.battle import AdvPlayerSelector
 
 
 class BaseBattleController:
