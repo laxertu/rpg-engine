@@ -4,7 +4,6 @@ from pygame.locals import *
 from game.battle.GUI.graphics.pygame.component import AbstractWidgetSprite, AbstractTextComponent, PlayerActionsMenu
 from game.battle.GUI.graphics.pygame.component import TeamWidget, TextWidget
 
-from game.battle.wrapper import BattleWrapper
 from game.battle.GUI.graphics.pygame.core import load_image
 
 from game.prefabs.fantasy_game.GUI.mediator import PlayerTurnMediator
@@ -80,10 +79,8 @@ class StandardManager(AbstractBattleManager):
         self._feedback_display = TextWidget(surface=self._screen, size=20, rect=pygame.Rect(200, 120, 700, 100))
 
 
-        bw = BattleWrapper(team1, team2)
         wm = WindowManagerWrapper(self._screen)
 
-        self._bw = bw
         #self._player_actions_menu.set_actions(bw.get_possible_moves())
         self._is_over = False
 
@@ -93,7 +90,7 @@ class StandardManager(AbstractBattleManager):
             self._player_actions_menu,
             self._selected_action_display,
             self._selected_target_display,
-            bw,wm,
+            self.battle_wrapper,wm,
             self._feedback_display
         )
 
@@ -116,7 +113,7 @@ class StandardManager(AbstractBattleManager):
                     AbstractWidgetSprite.user_clicked = False
 
                 # iteration code here
-                if self._bw.game_over():
+                if self.battle_wrapper.game_over():
                     self._is_over = True
                 else:
                     self._update_interactive_widgets()

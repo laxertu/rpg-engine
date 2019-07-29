@@ -80,22 +80,7 @@ class WindowManager:
     def display_endgame(self):
         raise NotImplementedError('Abstract method')
 
-
-class ComponentFactory:
-    def create_textbox(self) -> AbstractTextComponent:
-        raise NotImplementedError('Abstract Method')
-
-    def create_sprite_container(self) -> AbstractSelectorComponent:
-        raise NotImplementedError('Abstract Method')
-
-    def create_actions_menu(self):
-        raise NotImplementedError('Abstract Method')
-
 class AbstractMediator:
-    """
-    TODO: rename with concrete class
-    """
-
     def __init__(self,
                  tw1: AbstractSelectorComponent, tw2: AbstractSelectorComponent,
                  pam:ActionsMenuComponent,

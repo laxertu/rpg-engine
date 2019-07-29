@@ -4,9 +4,7 @@ from game.battle.GUI.mediator import AbstractMediator
 # TODO: move to window manager pygame wrapper
 from pygame.time import wait
 
-
-class AbstractGuiMediator(AbstractMediator):
-
+class PlayerTurnMediator(AbstractMediator):
     def reset_scene_components(self):
         self._widget_selected_action_display.set_text('Select action')
         self._widget_player_actions_menu.set_actions(self._battle_wrapper.get_possible_moves())
@@ -19,8 +17,6 @@ class AbstractGuiMediator(AbstractMediator):
         self._widget_player_actions_menu.reset_selection()
         self._widget_team1.reset_selection()
         self._widget_team2.reset_selection()
-
-class PlayerTurnMediator(AbstractGuiMediator):
 
 
     def notify_mouseover(self, sender: AbstractNotifier, param=None) -> None:
