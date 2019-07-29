@@ -1,4 +1,4 @@
-from game.battle.battle import BaseAction, AbstractCharacter, Battle
+from game.battle.battle import BaseAction, AbstractCharacter
 from easyAI import AI_Player
 
 class Character(AbstractCharacter):
@@ -78,7 +78,7 @@ class Character(AbstractCharacter):
         self._magic_penalty += amount
         return self.name + ': -' + str(amount) + ' magic defense'
 
-    def possible_moves(self, battle: Battle):
+    def possible_moves(self):
         return self.abilities.keys()
 
     def scoring(self):

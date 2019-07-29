@@ -45,7 +45,7 @@ class Battle(TwoTeamsGame):
         actor = self.current_player()
         result = []
         for target in [x for x in range(0, len(self.alive_enemies()))]:
-            for action in actor.possible_moves(self):
+            for action in actor.possible_moves():
                 result.append(str(target) + '_' + action)
         return result
 

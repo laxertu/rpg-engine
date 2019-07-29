@@ -22,7 +22,7 @@ class BattleWrapper:
 
     def get_possible_moves(self):
         result = {}
-        action_keys = self._battle.player.possible_moves(self._battle)
+        action_keys = self._battle.player.possible_moves()
 
         for action_key in action_keys:
             result[action_key] = self._battle.player.abilities[action_key]
