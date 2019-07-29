@@ -99,7 +99,7 @@ class StandardManager(AbstractBattleManager):
 
         GuiComponent.mediator.init_scene()
 
-    def next(self):
+    def next(self) -> bool:
         going = True
         for event in pygame.event.get():
 
