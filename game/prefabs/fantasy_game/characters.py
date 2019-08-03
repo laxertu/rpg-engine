@@ -24,6 +24,7 @@ class Character(AbstractCharacter):
     def __str__(self):
         result = ''
         result += self.name + "\n" + ' HP ' + str(self.pf()) + '/' + str(self.pf_max())
+        result += "\n" + ' Armour: ' + str(self._armour) + ' Magic res: ' + str(self._magic_resistance)
         return result
 
     def to_str(self):
@@ -61,14 +62,12 @@ class Character(AbstractCharacter):
         self.abilities[action].do()
 
     def receive_phisical_damage(self, amount: int):
-        damage = max(0, amount - self.phisical_resistence())
-        self._pf -= damage
-        return self.name + ': -' + str(damage) + ' pf'
+        self._pf = max(0, self._pf - amount)
+        return self.name + ': -' + str(amount) + ' pf'
 
     def receive_magic_damage(self, amount: int):
-        damage = max(0, amount - self.magic_resistance())
-        self._pf -= damage
-        return self.name + ': -' + str(damage) + ' pf'
+        self._pf = max(0, self._pf - amount)
+        return self.name + ': -' + str(amount) + ' pf'
 
     def receive_armour_penalty(self, amount: int):
         self._armour_penalty += amount
@@ -120,7 +119,7 @@ class Wizard(HumanPlayer):
         self._armour = 0
         self._magic_resistance = 10
         self._attack = 0
-        self._magic = 5
+        self._magic = 8
 
         self.abilities = {'1': MagicPenalty(), '2': FireBall()}
 
@@ -141,10 +140,10 @@ class Daemon(AdvAI):
     def __init__(self, AI_algo, name = 'Daemon'):
         AdvAI.__init__(self,AI_algo, name)
 
-        self._pf_max = 10
+        self._pf_max = 30
         self._pf = self._pf_max
         self._armour = 6
-        self._magic_resistance = 12
+        self._magic_resistance = 8
         self._attack = 0
         self._magic = 3
 
@@ -203,6 +202,20 @@ class BasePhisicalAttack(Action):
     def simulate(self, source:Character, dest:Character) -> str:
         return dest.name + "\n" + str(self.calculate(source, dest)) + ' phisical damage ' + "\n" + 'Prob ' + str(self._probability) + '%'
 
+class BaseMagicAttack(Action):
+    _name = ''
+    _base_damage = 0
+
+
+    def do(self, source, dest):
+        return dest.receive_phisical_damage(self.calculate(source, dest))
+
+    def calculate(self, source:Character, dest:Character) -> int:
+        return max(self._base_damage + source.magic_attack() - dest.phisical_resistence(), 0)
+
+    def simulate(self, source:Character, dest:Character) -> str:
+        return dest.name + "\n" + str(self.calculate(source, dest)) + ' phisical damage ' + "\n" + 'Prob ' + str(self._probability) + '%'
+
 class SwordAttack(BasePhisicalAttack):
     _base_damage = 8
     _name = 'Sword attack'
@@ -215,7 +228,7 @@ class Destruction(BasePhisicalAttack):
     _probability = 20
 
 
-class FireBall(BasePhisicalAttack):
+class FireBall(BaseMagicAttack):
     _base_damage = 5
     _name = 'Fire ball'
     _probability = 80

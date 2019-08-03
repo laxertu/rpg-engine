@@ -1,11 +1,7 @@
 from game.battle.wrapper import BattleWrapper
 
 
-
-class AbstractNotifier:
-    pass
-
-class GuiComponent(AbstractNotifier):
+class GuiComponent:
 
     mediator = None
 
@@ -110,11 +106,11 @@ class AbstractMediator:
         self._selected_action = None
         #self._selected_target = None
 
-    def notify_mouseover(self, sender: AbstractNotifier) -> None:
+    def notify_mouseover(self, sender: GuiComponent) -> None:
         pass
-    def notify_mouseout(self, sender: AbstractNotifier) -> None:
+    def notify_mouseout(self, sender: GuiComponent) -> None:
         pass
-    def notify_click(self, sender: AbstractNotifier, param: None) -> None:
+    def notify_click(self, sender: GuiComponent, param: None) -> None:
         pass
 
     def init_scene(self):

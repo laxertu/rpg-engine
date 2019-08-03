@@ -1,5 +1,4 @@
-from game.battle.battle import Battle, AdvPlayerSelector
-from game.prefabs.fantasy_game.characters import Character, BaseAction
+from game.battle.battle import Battle, AdvPlayerSelector, AbstractCharacter, BaseAction
 
 class BattleWrapper:
 
@@ -74,7 +73,7 @@ class BattleWrapper:
         action, target = self._parse_move_str(move)
         return self._battle.player.name + ': ' + action.get_name() + ' -> ' + target.name
 
-    def _parse_move_str(self, raw_selection: str) -> (BaseAction, Character):
+    def _parse_move_str(self, raw_selection: str) -> (BaseAction, AbstractCharacter):
         parsed_result = raw_selection.split('_')
         target_id = int(parsed_result[0])
 

@@ -1,9 +1,9 @@
 import pygame
 from pygame.locals import *
-import os
 
 __LOADED_IMAGES = {}
 
+IMG_BASE_PATH = ''
 
 def load_image(name, colorkey=None):
     """
@@ -12,7 +12,7 @@ def load_image(name, colorkey=None):
     :param colorkey:
     :return:
     """
-    fullname = os.path.split(os.path.abspath(__file__))[0]+'/img/'+name
+    fullname = IMG_BASE_PATH + name
 
     if fullname not in __LOADED_IMAGES.keys():
         try:
